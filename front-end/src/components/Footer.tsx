@@ -1,6 +1,6 @@
 import { Container, Row, Col } from 'react-bootstrap';
 
-export const Footer: React.FunctionComponent = () => (
+export const Footer: React.FC = () => (
   <footer>
     <Container>
       <Row>

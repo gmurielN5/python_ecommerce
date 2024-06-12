@@ -1,4 +1,5 @@
 // import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Navbar,
   Nav,
@@ -6,11 +7,10 @@ import {
   Row,
   NavDropdown,
 } from 'react-bootstrap';
-// import { LinkContainer } from 'react-router-bootstrap';
 // import SearchBox from './SearchBox';
 // import { logout } from '../actions/userActions';
 
-export const Header: React.FunctionComponent = () => {
+export const Header: React.FC = () => {
   // const userLogin = useSelector((state) => state.userLogin);
   // const { userInfo } = userLogin;
 
@@ -24,20 +24,16 @@ export const Header: React.FunctionComponent = () => {
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container>
-          {/* <LinkContainer to="/"> */}
-          <Navbar.Brand>MeeShop</Navbar.Brand>
-          {/* </LinkContainer> */}
-
+          <Navbar.Brand as={Link} to="/">
+            MeeShop
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             {/* <SearchBox /> */}
             <Nav className="ml-auto">
-              {/* <LinkContainer to="/cart"> */}
-              <Nav.Link>
-                <i className="fas fa-shopping-cart"></i>Cart
+              <Nav.Link as={Link} to="/cart">
+                <i className="fas fa-shopping-cart pe-2"></i>Cart
               </Nav.Link>
-              {/* </LinkContainer> */}
-
               {/* {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
                   <LinkContainer to="/profile">
@@ -49,11 +45,9 @@ export const Header: React.FunctionComponent = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : ( */}
-              {/* <LinkContainer to="/login"> */}
-              <Nav.Link>
+              <Nav.Link as={Link} to="/login">
                 <i className="fas fa-user"></i>Login
               </Nav.Link>
-              {/* </LinkContainer> */}
               {/* )} */}
 
               {/* {userInfo && userInfo.isAdmin && (
