@@ -1,50 +1,52 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+
+import {
+  fetchProducts,
+  selectProducts,
+  selectLoading,
+  selectError,
+} from '../store/products/productsSlice';
+
+import { Loader } from '../components/Loader';
+import { Message } from '../components/Message';
 import { Product } from '../components/Products';
 
 import { Row, Col } from 'react-bootstrap';
 
-export type UserType = {
-  id: string;
-};
-//add User and createdAt
-export type ProductType = {
-  _id: string;
-  user: UserType;
-  name: string;
-  image: string;
-  description: string;
-  brand: string;
-  category: string;
-  price: number;
-  countInStock: number;
-  rating: number;
-  numReviews: number;
-  createdAt: string;
-};
-
 const HomePage: React.FC = () => {
-  const [products, setProducts] = useState<ProductType[]>([]);
+  const dispatch = useAppDispatch();
+  const products = useAppSelector(selectProducts);
+  const loading = useAppSelector(selectLoading);
+  const error = useAppSelector(selectError);
+
   useEffect(() => {
-    const GetPost = async () => {
-      const { data } = await axios.get<ProductType[]>(
-        'http://127.0.0.1:8000/api/products/'
-      );
-      setProducts(data);
-    };
-    GetPost();
-  }, []);
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
   return (
     <div>
       <h1>Latest Products</h1>
-      <Row>
-        {products.map((product) => (
-          <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-            <Product product={product} />
-          </Col>
-        ))}
-      </Row>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          {error ? (
+            <Message variant="danger">
+              <>{error}</>
+            </Message>
+          ) : (
+            <Row>
+              {products.map((product) => (
+                <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                  <Product product={product} />
+                </Col>
+              ))}
+            </Row>
+          )}
+        </>
+      )}
     </div>
   );
 };
