@@ -10,10 +10,10 @@ import {
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import {
-  fetchProduct,
   selectProduct,
   selectLoading,
 } from '../store/products/productsSlice';
+import { productInfo } from '../store/products/productActions';
 
 import {
   addToCart,
@@ -53,7 +53,7 @@ const CartPage: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchProduct(id));
+      dispatch(productInfo(id));
     }
   }, [id, dispatch]);
 

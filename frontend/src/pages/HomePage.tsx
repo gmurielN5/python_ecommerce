@@ -3,11 +3,12 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import {
-  fetchProducts,
   selectProducts,
   selectLoading,
   selectError,
 } from '../store/products/productsSlice';
+
+import { productsList } from '../store/products/productActions';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -22,7 +23,7 @@ const HomePage: React.FC = () => {
   const error = useAppSelector(selectError);
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch(productsList());
   }, [dispatch]);
 
   return (

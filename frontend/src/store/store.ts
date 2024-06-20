@@ -14,12 +14,17 @@ import {
 import storage from 'redux-persist/lib/storage';
 
 import { productsSlice } from './products/productsSlice';
+import { userSlice } from './user/userSlice';
 import { cartSlice } from './cart/cartSlice';
 
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
 
-const rootReducer = combineSlices(productsSlice, cartSlice);
+const rootReducer = combineSlices(
+  productsSlice,
+  userSlice,
+  cartSlice
+);
 
 type ExtendedPersistConfig = PersistConfig<RootState> & {
   whitelist: (keyof RootState)[];
@@ -28,7 +33,7 @@ type ExtendedPersistConfig = PersistConfig<RootState> & {
 const persistConfig: ExtendedPersistConfig = {
   key: 'root',
   storage,
-  whitelist: ['cart'],
+  whitelist: ['user', 'cart'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

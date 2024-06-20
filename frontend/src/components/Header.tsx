@@ -1,24 +1,21 @@
-// import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { Link } from 'react-router-dom';
-import {
-  Navbar,
-  Nav,
-  Container,
-  Row,
-  NavDropdown,
-} from 'react-bootstrap';
+
+import { logout } from '../store/user/userSlice';
+
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+
+import { selectUser } from '../store/user/userSlice';
+
 // import SearchBox from './SearchBox';
-// import { logout } from '../actions/userActions';
 
 export const Header: React.FC = () => {
-  // const userLogin = useSelector((state) => state.userLogin);
-  // const { userInfo } = userLogin;
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
 
-  // const dispatch = useDispatch();
-
-  // const logoutHandler = () => {
-  //   dispatch(logout());
-  // };
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
 
   return (
     <header>
@@ -34,21 +31,21 @@ export const Header: React.FC = () => {
               <Nav.Link as={Link} to="/cart">
                 <i className="fas fa-shopping-cart pe-2"></i>Cart
               </Nav.Link>
-              {/* {userInfo ? (
-                <NavDropdown title={userInfo.name} id="username">
-                  <LinkContainer to="/profile">
+              {user ? (
+                <NavDropdown title={user.name} id="username">
+                  <NavDropdown.Item as={Link} to="/profile">
                     <NavDropdown.Item>Profile</NavDropdown.Item>
-                  </LinkContainer>
+                  </NavDropdown.Item>
 
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
                   </NavDropdown.Item>
                 </NavDropdown>
-              ) : ( */}
-              <Nav.Link as={Link} to="/login">
-                <i className="fas fa-user"></i>Login
-              </Nav.Link>
-              {/* )} */}
+              ) : (
+                <Nav.Link as={Link} to="/login">
+                  <i className="fas fa-user pe-2"></i>Login
+                </Nav.Link>
+              )}
 
               {/* {userInfo && userInfo.isAdmin && (
                 <NavDropdown title="Admin" id="adminmenue">

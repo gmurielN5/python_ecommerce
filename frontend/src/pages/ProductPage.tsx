@@ -5,11 +5,12 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import {
-  fetchProduct,
   selectProduct,
   selectLoading,
   selectError,
 } from '../store/products/productsSlice';
+
+import { productInfo } from '../store/products/productActions';
 
 import {
   Row,
@@ -44,7 +45,7 @@ const ProductPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchProduct(id));
+    dispatch(productInfo(id));
   }, [dispatch, id]);
 
   const addToCartHandler = () => {
