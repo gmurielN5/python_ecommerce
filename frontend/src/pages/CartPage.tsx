@@ -10,6 +10,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import {
+  ProductType,
   selectProduct,
   selectLoading,
 } from '../store/products/productsSlice';
@@ -67,8 +68,13 @@ const CartPage: React.FC = () => {
     dispatch(removeItem(id));
   };
 
-  const handleAddItem = (e: ChangeEvent<HTMLSelectElement>): void => {
-    dispatch(addToCart({ product, qty: parseInt(e.target.value) }));
+  const handleAddItem = (
+    e: ChangeEvent<HTMLSelectElement>,
+    product: ProductType
+  ): void => {
+    dispatch(
+      addToCart({ product: product, qty: parseInt(e.target.value) })
+    );
   };
 
   const checkoutHandler = () => {
@@ -111,7 +117,7 @@ const CartPage: React.FC = () => {
                     <Form.Control
                       as="select"
                       value={item.quantity}
-                      onChange={(e) => handleAddItem(e)}
+                      onChange={(e) => handleAddItem(e, item)}
                     >
                       {[...Array(item.countInStock).keys()].map(
                         (x) => (

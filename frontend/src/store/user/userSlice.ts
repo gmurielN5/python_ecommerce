@@ -1,6 +1,6 @@
 import { createAppSlice } from '../createAppSlice';
 
-import { login, register } from './userActions';
+import { login, register, updateUser } from './userActions';
 
 export type UserType = {
   _id: number;
@@ -58,6 +58,19 @@ export const userSlice = createAppSlice({
         state.error = null;
       })
       .addCase(register.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.userInfo = action.payload;
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

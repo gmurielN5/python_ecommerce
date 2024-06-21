@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, SyntheticEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import {
@@ -34,7 +34,7 @@ const LoginPage: React.FC = () => {
 
   const origin = location.state?.from?.pathname || '/';
 
-  const handleLogin = (e) => {
+  const handleLogin = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(login({ email, password }));
   };

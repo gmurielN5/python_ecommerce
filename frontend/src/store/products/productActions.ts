@@ -9,8 +9,6 @@ export const productsList = createAsyncThunk(
       const { data } = await axios.get(
         `${import.meta.env.VITE_API_URL}/products`
       );
-      console.log('data products', data);
-
       return data;
     } catch (error) {
       console.log('error', error.response.data.detail);
@@ -30,7 +28,6 @@ export const productInfo = createAsyncThunk(
       const { data } = await axios.get(
         `${import.meta.env.VITE_API_URL}/products/${id}`
       );
-      console.log('data product', data);
       return data;
     } catch (error) {
       console.log('error', error.response.data.detail);

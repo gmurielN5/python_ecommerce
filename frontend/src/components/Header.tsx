@@ -3,9 +3,13 @@ import { Link } from 'react-router-dom';
 
 import { logout } from '../store/user/userSlice';
 
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 
-import { selectUser } from '../store/user/userSlice';
+import {
+  selectUser,
+  selectUserLoading,
+  selectUserError,
+} from '../store/user/userSlice';
 
 // import SearchBox from './SearchBox';
 
@@ -13,10 +17,14 @@ export const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
 
+  const loading = useAppSelector(selectUserLoading);
+  const error = useAppSelector(selectUserError);
+
   const logoutHandler = () => {
     dispatch(logout());
   };
 
+  console.log('user', user, 'loading', loading, 'error', error);
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
@@ -32,15 +40,20 @@ export const Header: React.FC = () => {
                 <i className="fas fa-shopping-cart pe-2"></i>Cart
               </Nav.Link>
               {user ? (
-                <NavDropdown title={user.name} id="username">
-                  <NavDropdown.Item as={Link} to="/profile">
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
-                  </NavDropdown.Item>
-
-                  <NavDropdown.Item onClick={logoutHandler}>
+                <>
+                  <Nav.Item className="text-secondary p-2">
+                    {user.name}
+                  </Nav.Item>
+                  <Nav.Link as={Link} to="/profile">
+                    Profile
+                  </Nav.Link>
+                  <Nav.Item
+                    onClick={logoutHandler}
+                    className="text-secondary p-2"
+                  >
                     Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
+                  </Nav.Item>
+                </>
               ) : (
                 <Nav.Link as={Link} to="/login">
                   <i className="fas fa-user pe-2"></i>Login

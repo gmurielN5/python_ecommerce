@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, SyntheticEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import { Link, useLocation, Navigate } from 'react-router-dom';
@@ -31,12 +31,13 @@ const RegisterPage: React.FC = () => {
 
   const redirect = location.state?.from?.pathname || '/';
 
-  const submitHandler = (e) => {
+  const submitHandler = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password != confirmPassword) {
       setMessage('Passwords do not match');
     } else {
       dispatch(register({ name, email, password }));
+      setMessage('');
     }
   };
 

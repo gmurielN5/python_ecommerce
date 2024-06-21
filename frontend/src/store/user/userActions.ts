@@ -66,3 +66,44 @@ export const register = createAsyncThunk(
     }
   }
 );
+
+export const updateUser = createAsyncThunk(
+  'user/update',
+  async (
+    credentials: {
+      id: number;
+      token: string;
+      name: string;
+      email: string;
+      password: string;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${credentials.token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${import.meta.env.VITE_API_URL}/users/profile/update/`,
+        {
+          id: credentials.id,
+          name: credentials.name,
+          email: credentials.email,
+          password: credentials.password,
+        },
+        config
+      );
+      return data;
+    } catch (error) {
+      console.log('error register', error);
+      if (error.response && error.response.data.detail) {
+        return rejectWithValue(error.response.data.detail);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);

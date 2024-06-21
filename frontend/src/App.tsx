@@ -8,6 +8,7 @@ import { Container } from 'react-bootstrap';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ProfilePage from './pages/ProfilePage';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
 
@@ -20,6 +21,7 @@ const App: React.FC = () => (
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/cart/:id?" element={<CartPage />} />
         </Routes>
