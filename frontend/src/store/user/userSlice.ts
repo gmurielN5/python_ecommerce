@@ -7,8 +7,6 @@ export type UserType = {
   name: string;
   username: string;
   email: string;
-  access: string;
-  refresh: string;
   token: string;
   isAdmin: boolean;
 };

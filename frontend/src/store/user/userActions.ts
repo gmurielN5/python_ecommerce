@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { RootState } from '../store';
 
 import axios from 'axios';
 
@@ -22,7 +23,8 @@ export const login = createAsyncThunk(
         },
         config
       );
-      return data;
+      const { _id, name, username, email, isAdmin, token } = data;
+      return { _id, name, username, email, isAdmin, token };
     } catch (error) {
       console.log('error', error.response.data.detail);
       if (error.response && error.response.data.detail) {
@@ -37,7 +39,7 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk(
   'user/register',
   async (
-    credentials: { name: string; email: string; password: string },
+    profileData: { name: string; email: string; password: string },
     { rejectWithValue }
   ) => {
     try {
@@ -48,11 +50,7 @@ export const register = createAsyncThunk(
       };
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/users/register/`,
-        {
-          name: credentials.name,
-          email: credentials.email,
-          password: credentials.password,
-        },
+        profileData,
         config
       );
       return data;
@@ -72,18 +70,23 @@ export const updateUser = createAsyncThunk(
   async (
     credentials: {
       id: number;
-      token: string;
       name: string;
       email: string;
       password: string;
     },
-    { rejectWithValue }
+    { getState, rejectWithValue }
   ) => {
+    const state = getState() as RootState;
+    const token = state.user.userInfo?.token;
+
+    if (!token) {
+      return rejectWithValue('No user found');
+    }
     try {
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${credentials.token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
       const { data } = await axios.put(

@@ -22,6 +22,8 @@ import {
   selectCart,
 } from '../store/cart/cartSlice';
 
+import { selectUser } from '../store/user/userSlice';
+
 import {
   Row,
   Col,
@@ -48,8 +50,10 @@ const CartPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(selectCart);
   const product = useAppSelector(selectProduct);
+  const user = useAppSelector(selectUser);
   const loading = useAppSelector(selectLoading);
 
+  console.log('product', product);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -78,7 +82,7 @@ const CartPage: React.FC = () => {
   };
 
   const checkoutHandler = () => {
-    navigate('/login?redirect=shipping');
+    !user ? navigate('/login') : navigate('/shipping');
   };
 
   return (

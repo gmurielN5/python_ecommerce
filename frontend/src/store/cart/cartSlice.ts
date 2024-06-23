@@ -2,16 +2,27 @@ import { createAppSlice } from '../createAppSlice';
 
 import { ProductType } from '../products/productsSlice';
 
-export type CartItems = {
+export type CartItemsType = {
   quantity: number;
 } & ProductType;
 
+export type ShippingAddressType = {
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+};
+
 type CardSliceState = {
-  cartItems: CartItems[];
+  cartItems: CartItemsType[];
+  shippingAddress: ShippingAddressType | null;
+  paymentMethod: string | null;
 };
 
 const initialState: CardSliceState = {
   cartItems: [],
+  shippingAddress: null,
+  paymentMethod: null,
 };
 
 export const cartSlice = createAppSlice({
@@ -19,6 +30,7 @@ export const cartSlice = createAppSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
+      console.log('action', action);
       const { product, qty } = action.payload;
       const itemInCart = state.cartItems.find(
         (item) => item._id === product._id
@@ -35,10 +47,34 @@ export const cartSlice = createAppSlice({
       );
       state.cartItems = removeItem;
     },
+    clearCart: (state) => {
+      state.cartItems = [];
+      state.shippingAddress = null;
+    },
+    addShippingAddress: (state, action) => {
+      state.shippingAddress = action.payload;
+    },
+    addPaymentMethod: (state, action) => {
+      state.paymentMethod = action.payload;
+    },
   },
-  selectors: { selectCart: (cart) => cart.cartItems },
+  selectors: {
+    selectCart: (cart) => cart.cartItems,
+    selectShippingAddress: (cart) => cart.shippingAddress,
+    selectPaymentMethod: (cart) => cart.paymentMethod,
+  },
 });
 
-export const { addToCart, removeItem } = cartSlice.actions;
+export const {
+  addToCart,
+  removeItem,
+  clearCart,
+  addShippingAddress,
+  addPaymentMethod,
+} = cartSlice.actions;
 
-export const { selectCart } = cartSlice.selectors;
+export const {
+  selectCart,
+  selectShippingAddress,
+  selectPaymentMethod,
+} = cartSlice.selectors;

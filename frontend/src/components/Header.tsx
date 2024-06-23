@@ -2,29 +2,31 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { Link } from 'react-router-dom';
 
 import { logout } from '../store/user/userSlice';
+import { clearCart } from '../store/cart/cartSlice';
+import { clearOrderItem } from '../store/order/orderSlice';
 
 import { Navbar, Nav, Container } from 'react-bootstrap';
 
-import {
-  selectUser,
-  selectUserLoading,
-  selectUserError,
-} from '../store/user/userSlice';
+import { selectUser } from '../store/user/userSlice';
+import { selectOrder } from '../store/order/orderSlice';
+import { selectCart } from '../store/cart/cartSlice';
 
 // import SearchBox from './SearchBox';
 
 export const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
-
-  const loading = useAppSelector(selectUserLoading);
-  const error = useAppSelector(selectUserError);
+  const order = useAppSelector(selectOrder);
+  const cart = useAppSelector(selectCart);
 
   const logoutHandler = () => {
     dispatch(logout());
+    dispatch(clearCart());
+    dispatch(clearOrderItem());
   };
 
-  console.log('user', user, 'loading', loading, 'error', error);
+  console.log('user', user, 'cart', cart, 'order', order);
+
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>

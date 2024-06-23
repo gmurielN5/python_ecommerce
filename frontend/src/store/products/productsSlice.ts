@@ -4,7 +4,6 @@ import { productsList, productInfo } from './productActions';
 
 export type ProductType = {
   _id: string;
-  // user: UserType;
   name: string;
   image: string;
   description: string;

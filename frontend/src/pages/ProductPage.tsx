@@ -45,7 +45,9 @@ const ProductPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(productInfo(id));
+    if (id) {
+      dispatch(productInfo(id));
+    }
   }, [dispatch, id]);
 
   const addToCartHandler = () => {

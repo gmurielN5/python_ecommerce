@@ -1,7 +1,6 @@
 import { useState, useEffect, SyntheticEvent } from 'react';
 
-import { Link, Navigate } from 'react-router-dom';
-import { Form, Button, Row, Col, Table } from 'react-bootstrap';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
@@ -45,7 +44,6 @@ const ProfilePage: React.FC = () => {
         dispatch(
           updateUser({
             id: user._id,
-            token: user.token,
             name: name,
             email: email,
             password: password,
@@ -58,7 +56,6 @@ const ProfilePage: React.FC = () => {
 
   return (
     <>
-      {!user && <Navigate to="/login" replace={true} />}
       <Row>
         <Col md={3}>
           <h2>User Profile</h2>
