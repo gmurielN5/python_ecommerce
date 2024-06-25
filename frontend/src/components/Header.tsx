@@ -8,24 +8,18 @@ import { clearOrderItem } from '../store/order/orderSlice';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 
 import { selectUser } from '../store/user/userSlice';
-import { selectOrder } from '../store/order/orderSlice';
-import { selectCart } from '../store/cart/cartSlice';
 
 // import SearchBox from './SearchBox';
 
 export const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
-  const order = useAppSelector(selectOrder);
-  const cart = useAppSelector(selectCart);
 
   const logoutHandler = () => {
     dispatch(logout());
     dispatch(clearCart());
     dispatch(clearOrderItem());
   };
-
-  console.log('user', user, 'cart', cart, 'order', order);
 
   return (
     <header>

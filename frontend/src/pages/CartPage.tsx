@@ -8,21 +8,14 @@ import {
 } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { addToCart } from '../store/cart/cartActions';
 
 import {
-  ProductType,
-  selectProduct,
-  selectLoading,
-} from '../store/products/productsSlice';
-import { productInfo } from '../store/products/productActions';
-
-import {
-  addToCart,
   removeItem,
   selectCart,
+  selectCartLoading,
+  selectCartError,
 } from '../store/cart/cartSlice';
-
-import { selectUser } from '../store/user/userSlice';
 
 import {
   Row,
@@ -49,24 +42,16 @@ const CartPage: React.FC = () => {
     : 1;
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(selectCart);
-  const product = useAppSelector(selectProduct);
-  const user = useAppSelector(selectUser);
-  const loading = useAppSelector(selectLoading);
+  const loading = useAppSelector(selectCartLoading);
+  const error = useAppSelector(selectCartError);
 
-  console.log('product', product);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
-      dispatch(productInfo(id));
+      dispatch(addToCart({ id: id, qty: qty }));
     }
-  }, [id, dispatch]);
-
-  useEffect(() => {
-    if (product) {
-      dispatch(addToCart({ product, qty }));
-    }
-  }, [dispatch, product, qty]);
+  }, [id, qty, dispatch]);
 
   const removeFromCartHandler = (id: string) => {
     dispatch(removeItem(id));
@@ -74,22 +59,21 @@ const CartPage: React.FC = () => {
 
   const handleAddItem = (
     e: ChangeEvent<HTMLSelectElement>,
-    product: ProductType
+    id: string
   ): void => {
-    dispatch(
-      addToCart({ product: product, qty: parseInt(e.target.value) })
-    );
-  };
-
-  const checkoutHandler = () => {
-    !user ? navigate('/login') : navigate('/shipping');
+    dispatch(addToCart({ id: id, qty: parseInt(e.target.value) }));
   };
 
   return (
     <Row>
       <Col md={8}>
-        {loading && <Loader />}
         <h1>Shopping Cart</h1>
+        {loading && <Loader />}
+        {error && (
+          <Message variant="danger">
+            <>{error}</>
+          </Message>
+        )}
         {cartItems.length === 0 ? (
           <Message variant="info">
             <p>
@@ -121,7 +105,7 @@ const CartPage: React.FC = () => {
                     <Form.Control
                       as="select"
                       value={item.quantity}
-                      onChange={(e) => handleAddItem(e, item)}
+                      onChange={(e) => handleAddItem(e, item._id)}
                     >
                       {[...Array(item.countInStock).keys()].map(
                         (x) => (
@@ -176,7 +160,7 @@ const CartPage: React.FC = () => {
               type="button"
               className="btn-block"
               disabled={cartItems.length === 0}
-              onClick={checkoutHandler}
+              onClick={() => navigate('/shipping')}
             >
               Proceed To Checkout
             </Button>
