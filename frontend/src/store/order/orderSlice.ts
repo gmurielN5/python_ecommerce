@@ -1,6 +1,10 @@
 import { createAppSlice } from '../createAppSlice';
 
-import { placeOrder } from './orderActions';
+import {
+  createOrder,
+  getOrderDetails,
+  payOrder,
+} from './orderActions';
 
 import { UserType } from '../user/userSlice';
 import {
@@ -9,16 +13,19 @@ import {
 } from '../cart/cartSlice';
 
 export type OrderType = {
-  createdAt?: Date;
-  isDelivered?: boolean;
-  isPaid?: boolean;
+  createdAt: Date;
+  deliveredAt?: string;
+  isDelivered: boolean;
+  isPaid: boolean;
   orderItems: CartItemsType[];
   paidAt?: string;
+  paymentMethod?: string;
   shippingAddress: ShippingAddressType;
   shippingPrice: string;
   taxPrice: string;
-  user?: UserType;
-  _id?: number;
+  totalPrice: string;
+  user: UserType;
+  _id: number;
 };
 
 type OrderSliceState = {
@@ -46,16 +53,38 @@ export const orderSlice = createAppSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(placeOrder.pending, (state) => {
+      .addCase(createOrder.pending, (state) => {
         state.loading = true;
       })
-      .addCase(placeOrder.fulfilled, (state, action) => {
-        console.log(state, action);
+      .addCase(createOrder.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.order = action.payload;
       })
-      .addCase(placeOrder.rejected, (state, action) => {
+      .addCase(createOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getOrderDetails.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getOrderDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.order = action.payload;
+      })
+      .addCase(getOrderDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(payOrder.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(payOrder.fulfilled, (state, action) => {
+        console.log('action', action);
+        state.loading = false;
+        // state.order = action.payload;
+      })
+      .addCase(payOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

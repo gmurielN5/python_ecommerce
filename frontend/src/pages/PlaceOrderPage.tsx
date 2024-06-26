@@ -13,9 +13,10 @@ import {
   selectOrderLoading,
   selectOrderSuccess,
   selectOrderError,
+  clearOrderItem,
 } from '../store/order/orderSlice';
 
-import { placeOrder } from '../store/order/orderActions';
+import { createOrder } from '../store/order/orderActions';
 import { clearCart } from '../store/cart/cartSlice';
 
 import {
@@ -73,12 +74,13 @@ const PlaceOrderPage: React.FC = () => {
     if (orderSuccess && orderDetail) {
       navigate(`/order/${orderDetail._id}`);
       dispatch(clearCart());
+      dispatch(clearOrderItem());
     }
   }, [orderSuccess, orderDetail, navigate, dispatch]);
 
   const handleOrder = () => {
     dispatch(
-      placeOrder({
+      createOrder({
         orderItems: cartItems,
         shippingAddress: shippingAddress,
         paymentMethod: paymentMethod,
