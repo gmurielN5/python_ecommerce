@@ -73,42 +73,72 @@ export const getOrderDetails = createAsyncThunk(
 export const payOrder = createAsyncThunk(
   'order/payOrder',
   async (
-    credentials: { id: string; paymentResult: string },
+    credentials: { id: string; details: any; data: any },
     { getState, rejectWithValue }
   ) => {
-    console.log(
-      'ip',
-      credentials.id,
-      'paymentResult',
-      credentials.paymentResult
-    );
-    // const state = getState() as RootState;
-    // const token = state.user.userInfo?.token;
+    const state = getState() as RootState;
+    const token = state.user.userInfo?.token;
 
-    // if (!token) {
-    //   return rejectWithValue('No user found');
-    // }
-    // try {
-    //   const config = {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   };
-    //   const { data } = await axios.put(
-    //     `${import.meta.env.VITE_API_URL}/orders/${id}/pay`,
-    //     paymentResult,
-    //     config
-    //   );
-    //   console.log('data', data);
-    //   return data;
-    // } catch (error) {
-    //   console.log('error register', error);
-    //   if (error.response && error.response.data.detail) {
-    //     return rejectWithValue(error.response.data.detail);
-    //   } else {
-    //     return rejectWithValue(error.message);
-    //   }
-    // }
+    if (!token) {
+      return rejectWithValue('No user found');
+    }
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${import.meta.env.VITE_API_URL}/orders/${
+          credentials.id
+        }/pay/`,
+        {
+          detail: credentials.details,
+          data: credentials.data,
+        },
+        config
+      );
+      return data;
+    } catch (error) {
+      console.log('error register', error);
+      if (error.response && error.response.data.detail) {
+        return rejectWithValue(error.response.data.detail);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const getOrdersList = createAsyncThunk(
+  'order/getOrdersList',
+  async (_, { getState, rejectWithValue }) => {
+    const state = getState() as RootState;
+    const token = state.user.userInfo?.token;
+
+    if (!token) {
+      return rejectWithValue('No user found');
+    }
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/orders/myorders/`,
+        config
+      );
+      return data;
+    } catch (error) {
+      console.log('error register', error);
+      if (error.response && error.response.data.detail) {
+        return rejectWithValue(error.response.data.detail);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
   }
 );

@@ -49,7 +49,7 @@ const CartPage: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(addToCart({ id: id, qty: qty }));
+      dispatch(addToCart({ id: id, quantity: qty }));
     }
   }, [id, qty, dispatch]);
 
@@ -61,7 +61,9 @@ const CartPage: React.FC = () => {
     e: ChangeEvent<HTMLSelectElement>,
     id: string
   ): void => {
-    dispatch(addToCart({ id: id, qty: parseInt(e.target.value) }));
+    dispatch(
+      addToCart({ id: id, quantity: parseInt(e.target.value) })
+    );
   };
 
   return (

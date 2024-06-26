@@ -72,9 +72,9 @@ const PlaceOrderPage: React.FC = () => {
 
   useEffect(() => {
     if (orderSuccess && orderDetail) {
-      navigate(`/order/${orderDetail._id}`);
       dispatch(clearCart());
       dispatch(clearOrderItem());
+      navigate(`/order/${orderDetail._id}`);
     }
   }, [orderSuccess, orderDetail, navigate, dispatch]);
 

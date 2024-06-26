@@ -7,7 +7,7 @@ export const addToCart = createAsyncThunk(
   async (
     credentials: {
       id: string;
-      qty: number;
+      quantity: number;
     },
     { rejectWithValue }
   ) => {
@@ -21,7 +21,7 @@ export const addToCart = createAsyncThunk(
         image: data.image,
         price: data.price,
         countInStock: data.countInStock,
-        quantity: credentials.qty,
+        quantity: credentials.quantity,
       };
     } catch (error) {
       console.log('error register', error);

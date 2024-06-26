@@ -1,6 +1,7 @@
 import { useState, useEffect, SyntheticEvent } from 'react';
+import { Link } from 'react-router-dom';
 
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import { Form, Button, Row, Col, Table } from 'react-bootstrap';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
@@ -11,6 +12,8 @@ import {
 } from '../store/user/userSlice';
 
 import { updateUser } from '../store/user/userActions';
+import { getOrdersList } from '../store/order/orderActions';
+import { selectOrderList } from '../store/order/orderSlice';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -26,13 +29,15 @@ const ProfilePage: React.FC = () => {
   const user = useAppSelector(selectUser);
   const loading = useAppSelector(selectUserLoading);
   const error = useAppSelector(selectUserError);
+  const ordersList = useAppSelector(selectOrderList);
 
   useEffect(() => {
     if (user) {
       setName(user.name);
       setEmail(user.email);
+      dispatch(getOrdersList());
     }
-  }, [user]);
+  }, [user, dispatch]);
 
   const submitHandler = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -120,13 +125,9 @@ const ProfilePage: React.FC = () => {
           </Form>
         </Col>
 
-        {/* <Col md={9}>
+        <Col md={9}>
           <h2>My Orders</h2>
-          {loadingOrders ? (
-            <Loader />
-          ) : errorOrders ? (
-            <Message variant="danger">{errorOrders}</Message>
-          ) : (
+          {!ordersList.length ? null : (
             <Table striped responsive className="table-sm">
               <thead>
                 <tr>
@@ -140,7 +141,7 @@ const ProfilePage: React.FC = () => {
               </thead>
 
               <tbody>
-                {orders.map((order) => (
+                {ordersList.map((order) => (
                   <tr key={order._id}>
                     <td>{order._id}</td>
                     <td>{order.createdAt.substring(0, 10)}</td>
@@ -156,16 +157,16 @@ const ProfilePage: React.FC = () => {
                       )}
                     </td>
                     <td>
-                      <LinkContainer to={`/order/${order._id}`}>
+                      <Link to={`/order/${order._id}`}>
                         <Button className="btn-sm">Details</Button>
-                      </LinkContainer>
+                      </Link>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </Table>
           )}
-        </Col> */}
+        </Col>
       </Row>
     </>
   );
