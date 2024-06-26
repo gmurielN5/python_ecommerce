@@ -50,14 +50,14 @@ def addOrderItems(request):
             product=product,
             order=order,
             name=product.name,
-            qty=i['quantity'],
+            quantity=i['quantity'],
             price=i['price'],
             image=product.image.url,
         )
 
         # (4) Update stock
 
-        product.countInStock -= item.qty
+        product.countInStock -= item.quantity
         product.save()
 
     serializer = OrderSerializer(order, many=False)
