@@ -5,7 +5,7 @@ import { logout } from '../store/user/userSlice';
 import { clearCart } from '../store/cart/cartSlice';
 import { clearOrderItem } from '../store/order/orderSlice';
 
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 
 import { selectUser } from '../store/user/userSlice';
 
@@ -37,18 +37,15 @@ export const Header: React.FC = () => {
               </Nav.Link>
               {user ? (
                 <>
-                  <Nav.Item className="text-secondary p-2">
-                    {user.name}
-                  </Nav.Item>
-                  <Nav.Link as={Link} to="/profile">
-                    Profile
-                  </Nav.Link>
-                  <Nav.Item
-                    onClick={logoutHandler}
-                    className="text-secondary p-2"
-                  >
-                    Logout
-                  </Nav.Item>
+                  <NavDropdown title={user.name} id="username">
+                    <NavDropdown.Item as={Link} to="/profile">
+                      Profile
+                    </NavDropdown.Item>
+
+                    <NavDropdown.Item onClick={logoutHandler}>
+                      Logout
+                    </NavDropdown.Item>
+                  </NavDropdown>
                 </>
               ) : (
                 <Nav.Link as={Link} to="/login">
@@ -56,21 +53,19 @@ export const Header: React.FC = () => {
                 </Nav.Link>
               )}
 
-              {/* {userInfo && userInfo.isAdmin && (
-                <NavDropdown title="Admin" id="adminmenue">
-                  <LinkContainer to="/admin/userlist">
-                    <NavDropdown.Item>Users</NavDropdown.Item>
-                  </LinkContainer>
-
-                  <LinkContainer to="/admin/productlist">
-                    <NavDropdown.Item>Products</NavDropdown.Item>
-                  </LinkContainer>
-
-                  <LinkContainer to="/admin/orderlist">
-                    <NavDropdown.Item>Orders</NavDropdown.Item>
-                  </LinkContainer>
+              {user && user.isAdmin && (
+                <NavDropdown title="Admin" id="adminmenu">
+                  <NavDropdown.Item as={Link} to="/admin/userlist">
+                    Users
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/admin/productlist">
+                    Product
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/admin/orderlist">
+                    Orders
+                  </NavDropdown.Item>
                 </NavDropdown>
-              )} */}
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>

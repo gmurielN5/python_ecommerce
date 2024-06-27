@@ -10,14 +10,15 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
-import ProtectedRoute from './pages/ProtectedRoute';
+import ProtectedUserRoute from './pages/ProtectedUserRoute';
 import ProfilePage from './pages/ProfilePage';
 import ShippingPage from './pages/ShippingPage';
 import PaymentPage from './pages/PaymentPage';
 import PlaceOrderPage from './pages/PlaceOrderPage';
 import OrderPage from './pages/OrderPage';
-import AdminPage from './pages/AdminPage';
+import ProtectedAdminRoute from './pages/ProtectedAdminRoute';
 import UsersListPage from './pages/UsersListPage';
+import UserEditPage from './pages/UserEditPage';
 
 const App: React.FC = () => (
   <>
@@ -30,16 +31,20 @@ const App: React.FC = () => (
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/cart/:id?" element={<CartPage />} />
-          <Route path="/" element={<ProtectedRoute />}>
+          <Route path="/" element={<ProtectedUserRoute />}>
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/shipping" element={<ShippingPage />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/placeorder" element={<PlaceOrderPage />} />
             <Route path="/order/:id" element={<OrderPage />} />
-            <Route path="/admin" element={<AdminPage />}>
+            <Route path="/admin" element={<ProtectedAdminRoute />}>
               <Route
                 path="/admin/userlist"
                 element={<UsersListPage />}
+              />
+              <Route
+                path="/admin/user/:id/edit"
+                element={<UserEditPage />}
               />
             </Route>
           </Route>

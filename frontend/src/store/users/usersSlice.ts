@@ -1,18 +1,28 @@
 import { createAppSlice } from '../createAppSlice';
-import { login } from '../user/userActions';
 
-import { UserType, userSlice } from '../user/userSlice';
+import {
+  getUsersList,
+  deleteUser,
+  getUserProfile,
+} from './usersActions';
 
-import { getUsersList } from './usersActions';
+export type UserProfileType = {
+  _id: number;
+  name: string;
+  username: string;
+  isAdmin: boolean;
+};
 
 type UserSliceState = {
-  usersList: UserType[];
+  usersList: UserProfileType[];
+  userProfile: UserProfileType | null;
   loading: boolean;
   error: string | null;
 };
 
 const initialState: UserSliceState = {
   usersList: [],
+  userProfile: null,
   loading: false,
   error: null,
 };
@@ -32,21 +42,53 @@ export const usersSlice = createAppSlice({
         state.loading = true;
       })
       .addCase(getUsersList.fulfilled, (state, action) => {
-        console.log('action', action);
         state.loading = false;
+        state.usersList = action.payload;
       })
       .addCase(getUsersList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(deleteUser.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.usersList = state.usersList.filter(
+          (user) => user._id !== action.payload
+        );
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getUserProfile.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userProfile = action.payload;
+      })
+      .addCase(getUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
   },
   selectors: {
-    // selectUser: (user) => user.userInfo,
-    // selectUserLoading: (user) => user.loading,
-    // selectUserError: (user) => user.error,
+    selectUsersList: (users) => users.usersList,
+    selectUserProfile: (users) => users.userProfile,
+    selectUsersLoading: (users) => users.loading,
+    selectUsersError: (users) => users.error,
   },
 });
 
 export const { clearUsersList } = usersSlice.actions;
 
-export const {} = usersSlice.selectors;
+export const {
+  selectUsersList,
+  selectUserProfile,
+  selectUsersLoading,
+  selectUsersError,
+} = usersSlice.selectors;
