@@ -40,7 +40,6 @@ export const userSlice = createAppSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.userInfo = action.payload;
         state.loading = false;
-        state.error = null;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -53,7 +52,6 @@ export const userSlice = createAppSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.userInfo = action.payload;
         state.loading = false;
-        state.error = null;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
@@ -66,7 +64,6 @@ export const userSlice = createAppSlice({
       .addCase(updateUser.fulfilled, (state, action) => {
         state.userInfo = action.payload;
         state.loading = false;
-        state.error = null;
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.loading = false;

@@ -16,6 +16,8 @@ import ShippingPage from './pages/ShippingPage';
 import PaymentPage from './pages/PaymentPage';
 import PlaceOrderPage from './pages/PlaceOrderPage';
 import OrderPage from './pages/OrderPage';
+import AdminPage from './pages/AdminPage';
+import UsersListPage from './pages/UsersListPage';
 
 const App: React.FC = () => (
   <>
@@ -34,6 +36,12 @@ const App: React.FC = () => (
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/placeorder" element={<PlaceOrderPage />} />
             <Route path="/order/:id" element={<OrderPage />} />
+            <Route path="/admin" element={<AdminPage />}>
+              <Route
+                path="/admin/userlist"
+                element={<UsersListPage />}
+              />
+            </Route>
           </Route>
         </Routes>
       </Container>

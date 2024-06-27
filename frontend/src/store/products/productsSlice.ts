@@ -43,7 +43,6 @@ export const productsSlice = createAppSlice({
       .addCase(productsList.fulfilled, (state, action) => {
         state.loading = false;
         state.products = action.payload;
-        state.error = null;
       })
       .addCase(productsList.rejected, (state, action) => {
         state.loading = false;
@@ -56,7 +55,6 @@ export const productsSlice = createAppSlice({
       .addCase(productInfo.fulfilled, (state, action) => {
         state.loading = false;
         state.product = action.payload;
-        state.error = null;
       })
       .addCase(productInfo.rejected, (state, action) => {
         state.loading = false;

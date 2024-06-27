@@ -17,12 +17,14 @@ import { productsSlice } from './products/productsSlice';
 import { userSlice } from './user/userSlice';
 import { cartSlice } from './cart/cartSlice';
 import { orderSlice } from './order/orderSlice';
+import { usersSlice } from './users/usersSlice';
 
 const rootReducer = combineSlices(
   productsSlice,
   userSlice,
   orderSlice,
-  cartSlice
+  cartSlice,
+  usersSlice
 );
 
 export type RootState = ReturnType<typeof rootReducer>;
@@ -34,7 +36,7 @@ type ExtendedPersistConfig = PersistConfig<RootState> & {
 const persistConfig: ExtendedPersistConfig = {
   key: 'root',
   storage,
-  whitelist: ['user', 'cart'],
+  whitelist: ['products', 'user', 'cart'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
