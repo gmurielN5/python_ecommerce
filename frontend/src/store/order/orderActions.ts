@@ -111,6 +111,38 @@ export const payOrder = createAsyncThunk(
   }
 );
 
+export const getUserOrdersList = createAsyncThunk(
+  'order/getUserOrdersList',
+  async (_, { getState, rejectWithValue }) => {
+    const state = getState() as RootState;
+    const token = state.user.userInfo?.token;
+
+    if (!token) {
+      return rejectWithValue('No user found');
+    }
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/orders/myorders/`,
+        config
+      );
+      return data;
+    } catch (error) {
+      console.log('error register', error);
+      if (error.response && error.response.data.detail) {
+        return rejectWithValue(error.response.data.detail);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 export const getOrdersList = createAsyncThunk(
   'order/getOrdersList',
   async (_, { getState, rejectWithValue }) => {
@@ -128,7 +160,41 @@ export const getOrdersList = createAsyncThunk(
         },
       };
       const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/orders/myorders/`,
+        `${import.meta.env.VITE_API_URL}/orders/`,
+        config
+      );
+      return data;
+    } catch (error) {
+      console.log('error register', error);
+      if (error.response && error.response.data.detail) {
+        return rejectWithValue(error.response.data.detail);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const deliverOrder = createAsyncThunk(
+  'order/deliverOrder',
+  async (orderDetails: OrderType, { getState, rejectWithValue }) => {
+    const state = getState() as RootState;
+    const token = state.user.userInfo?.token;
+    if (!token) {
+      return rejectWithValue('No user found');
+    }
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${import.meta.env.VITE_API_URL}/orders/${
+          orderDetails._id
+        }/deliver/`,
+        {},
         config
       );
       return data;

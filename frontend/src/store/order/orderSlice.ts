@@ -3,8 +3,10 @@ import { createAppSlice } from '../createAppSlice';
 import {
   createOrder,
   getOrderDetails,
-  payOrder,
+  getUserOrdersList,
   getOrdersList,
+  payOrder,
+  deliverOrder,
 } from './orderActions';
 
 import { UserType } from '../user/userSlice';
@@ -14,6 +16,7 @@ import {
 } from '../cart/cartSlice';
 
 export type OrderType = {
+  _id: number;
   createdAt: string;
   deliveredAt: string;
   isDelivered: boolean;
@@ -26,7 +29,6 @@ export type OrderType = {
   taxPrice: string;
   totalPrice: string;
   user: UserType;
-  _id: number;
 };
 
 type OrderSliceState = {
@@ -80,14 +82,14 @@ export const orderSlice = createAppSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      .addCase(payOrder.pending, (state) => {
+      .addCase(getUserOrdersList.pending, (state) => {
         state.loading = true;
       })
-      .addCase(payOrder.fulfilled, (state) => {
+      .addCase(getUserOrdersList.fulfilled, (state, action) => {
+        state.ordersList = action.payload;
         state.loading = false;
-        state.order.isPaid = true;
       })
-      .addCase(payOrder.rejected, (state, action) => {
+      .addCase(getUserOrdersList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
@@ -99,6 +101,28 @@ export const orderSlice = createAppSlice({
         state.loading = false;
       })
       .addCase(getOrdersList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(payOrder.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(payOrder.fulfilled, (state) => {
+        state.loading = false;
+        state.order.isPaid = true;
+      })
+      .addCase(payOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(deliverOrder.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deliverOrder.fulfilled, (state) => {
+        state.loading = false;
+        state.order.isDelivered = true;
+      })
+      .addCase(deliverOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

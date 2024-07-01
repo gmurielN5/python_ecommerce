@@ -19,6 +19,9 @@ import OrderPage from './pages/OrderPage';
 import ProtectedAdminRoute from './pages/ProtectedAdminRoute';
 import UsersListPage from './pages/UsersListPage';
 import UserEditPage from './pages/UserEditPage';
+import ProductsListPage from './pages/ProductListPage';
+import ProductEditPage from './pages/ProductEditPage';
+import OrdersListPage from './pages/OrderListPage';
 
 const App: React.FC = () => (
   <>
@@ -38,14 +41,20 @@ const App: React.FC = () => (
             <Route path="/placeorder" element={<PlaceOrderPage />} />
             <Route path="/order/:id" element={<OrderPage />} />
             <Route path="/admin" element={<ProtectedAdminRoute />}>
+              <Route path="userlist" element={<UsersListPage />} />
               <Route
-                path="/admin/userlist"
-                element={<UsersListPage />}
-              />
-              <Route
-                path="/admin/user/:id/edit"
+                path="user/:id/edit"
                 element={<UserEditPage />}
               />
+              <Route
+                path="productlist"
+                element={<ProductsListPage />}
+              />
+              <Route
+                path="product/:id/edit"
+                element={<ProductEditPage />}
+              />
+              <Route path="orderlist" element={<OrdersListPage />} />
             </Route>
           </Route>
         </Routes>

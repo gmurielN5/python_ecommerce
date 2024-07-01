@@ -8,6 +8,7 @@ import PayPalButton from '../utils/PaypalButton';
 import {
   getOrderDetails,
   payOrder,
+  deliverOrder,
 } from '../store/order/orderActions';
 
 import {
@@ -16,7 +17,16 @@ import {
   selectOrderError,
 } from '../store/order/orderSlice';
 
-import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import { selectUser } from '../store/user/userSlice';
+
+import {
+  Row,
+  Col,
+  ListGroup,
+  Image,
+  Card,
+  Button,
+} from 'react-bootstrap';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -32,6 +42,7 @@ const OrderPage: React.FC = () => {
   const order = useAppSelector(selectOrder);
   const loading = useAppSelector(selectOrderLoading);
   const error = useAppSelector(selectOrderError);
+  const userInfo = useAppSelector(selectUser);
 
   const dispatch = useAppDispatch();
 
@@ -54,7 +65,11 @@ const OrderPage: React.FC = () => {
   }, [order, id, dispatch]);
 
   const successPaymentHandler = (details: any, data: any) => {
-    dispatch(payOrder({ id: id, details, details, data: data }));
+    dispatch(payOrder({ id: id, details: details, data: data }));
+  };
+
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order));
   };
 
   return (
@@ -207,21 +222,21 @@ const OrderPage: React.FC = () => {
                         </ListGroup.Item>
                       )}
                     </ListGroup>
-                    {/* {loadingDeliver && <Loader />} */}
-                    {/* {userInfo &&
-                        userInfo.isAdmin &&
-                        order.isPaid &&
-                        !order.isDelivered && (
-                          <ListGroup.Item>
-                            <Button
-                              type="button"
-                              className="btn btn-block"
-                              onClick={deliverHandler}
-                            >
-                              Mark As Delivered
-                            </Button>
-                          </ListGroup.Item>
-                        )} */}
+
+                    {userInfo &&
+                      userInfo.isAdmin &&
+                      order.isPaid &&
+                      !order.isDelivered && (
+                        <ListGroup.Item>
+                          <Button
+                            type="button"
+                            className="btn btn-block"
+                            onClick={deliverHandler}
+                          >
+                            Mark As Delivered
+                          </Button>
+                        </ListGroup.Item>
+                      )}
                   </Card>
                 </Col>
               </Row>

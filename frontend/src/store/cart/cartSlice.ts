@@ -3,7 +3,7 @@ import { createAppSlice } from '../createAppSlice';
 import { addToCart } from './cartActions';
 
 export type CartItemsType = {
-  _id: string;
+  _id: number;
   name: string;
   image: string;
   price: number;

@@ -10,7 +10,7 @@ import {
   selectError,
 } from '../store/products/productsSlice';
 
-import { productInfo } from '../store/products/productActions';
+import { getProduct } from '../store/products/productActions';
 
 import {
   Row,
@@ -46,7 +46,7 @@ const ProductPage: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(productInfo(id));
+      dispatch(getProduct(Number(id)));
     }
   }, [dispatch, id]);
 

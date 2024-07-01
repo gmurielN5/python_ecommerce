@@ -34,18 +34,14 @@ const UserEditPage: React.FC = () => {
   const error = useAppSelector(selectUsersError);
 
   useEffect(() => {
-    if (id) {
+    if (!userProfile || userProfile._id !== Number(id)) {
       dispatch(getUserProfile(Number(id)));
-    }
-  }, [dispatch, id]);
-
-  useEffect(() => {
-    if (userProfile) {
+    } else {
       setName(userProfile.name);
       setUsername(userProfile.username);
       setIsAdmin(userProfile.isAdmin);
     }
-  }, [userProfile]);
+  }, [dispatch, userProfile, id]);
 
   const submitHandler = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();

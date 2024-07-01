@@ -1,9 +1,16 @@
 import { createAppSlice } from '../createAppSlice';
 
-import { productsList, productInfo } from './productActions';
+import {
+  getProducts,
+  getProduct,
+  createProduct,
+  uploadImage,
+  updateProduct,
+  deleteProduct,
+} from './productActions';
 
 export type ProductType = {
-  _id: string;
+  _id: number;
   name: string;
   image: string;
   description: string;
@@ -33,30 +40,83 @@ const initialState: ProductsSliceState = {
 export const productsSlice = createAppSlice({
   name: 'products',
   initialState,
-  reducers: {},
+  reducers: {
+    clearProduct: (state) => {
+      state.product = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(productsList.pending, (state) => {
+      .addCase(getProducts.pending, (state) => {
         state.error = null;
         state.loading = true;
       })
-      .addCase(productsList.fulfilled, (state, action) => {
+      .addCase(getProducts.fulfilled, (state, action) => {
         state.loading = false;
         state.products = action.payload;
       })
-      .addCase(productsList.rejected, (state, action) => {
+      .addCase(getProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-      .addCase(productInfo.pending, (state) => {
+      .addCase(getProduct.pending, (state) => {
         state.error = null;
         state.loading = true;
       })
-      .addCase(productInfo.fulfilled, (state, action) => {
+      .addCase(getProduct.fulfilled, (state, action) => {
         state.loading = false;
         state.product = action.payload;
       })
-      .addCase(productInfo.rejected, (state, action) => {
+      .addCase(getProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(createProduct.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.product = action.payload;
+      })
+      .addCase(createProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(uploadImage.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(uploadImage.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(uploadImage.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.product = action.payload;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(deleteProduct.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.products = state.products.filter(
+          (el) => el._id !== action.payload
+        );
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
@@ -75,3 +135,5 @@ export const {
   selectLoading,
   selectError,
 } = productsSlice.selectors;
+
+export const { clearProduct } = productsSlice.actions;

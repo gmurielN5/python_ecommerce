@@ -12,7 +12,7 @@ import {
 } from '../store/user/userSlice';
 
 import { updateUser } from '../store/user/userActions';
-import { getOrdersList } from '../store/order/orderActions';
+import { getUserOrdersList } from '../store/order/orderActions';
 import { selectOrderList } from '../store/order/orderSlice';
 
 import { Loader } from '../components/Loader';
@@ -35,7 +35,7 @@ const ProfilePage: React.FC = () => {
     if (user) {
       setName(user.name);
       setEmail(user.email);
-      dispatch(getOrdersList());
+      dispatch(getUserOrdersList());
     }
   }, [user, dispatch]);
 

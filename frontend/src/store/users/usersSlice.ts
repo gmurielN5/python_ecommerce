@@ -4,6 +4,7 @@ import {
   getUsersList,
   deleteUser,
   getUserProfile,
+  updateUserProfile,
 } from './usersActions';
 
 export type UserProfileType = {
@@ -49,6 +50,30 @@ export const usersSlice = createAppSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+      .addCase(getUserProfile.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userProfile = action.payload;
+      })
+      .addCase(getUserProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateUserProfile.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userProfile = action.payload;
+      })
+      .addCase(updateUserProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
       .addCase(deleteUser.pending, (state) => {
         state.error = null;
         state.loading = true;
@@ -60,18 +85,6 @@ export const usersSlice = createAppSlice({
         );
       })
       .addCase(deleteUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(getUserProfile.pending, (state) => {
-        state.error = null;
-        state.loading = true;
-      })
-      .addCase(getUserProfile.fulfilled, (state, action) => {
-        state.loading = false;
-        state.userProfile = action.payload;
-      })
-      .addCase(getUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
