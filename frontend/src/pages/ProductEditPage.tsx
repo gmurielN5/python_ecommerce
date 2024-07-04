@@ -18,7 +18,7 @@ import {
 } from '../store/products/productsSlice';
 
 import {
-  getProduct,
+  productDetails,
   updateProduct,
   uploadImage,
 } from '../store/products/productActions';
@@ -45,7 +45,7 @@ const ProductEditPage: React.FC = () => {
 
   useEffect(() => {
     if (!product || product._id !== Number(id)) {
-      dispatch(getProduct(Number(id)));
+      dispatch(productDetails(Number(id)));
     } else {
       setName(product.name);
       setPrice(product.price);

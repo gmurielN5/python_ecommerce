@@ -59,7 +59,7 @@ export const Header: React.FC = () => {
                     Users
                   </NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/admin/productlist">
-                    Product
+                    Products
                   </NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/admin/orderlist">
                     Orders

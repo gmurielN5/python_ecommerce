@@ -28,7 +28,6 @@ export const createOrder = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -60,7 +59,6 @@ export const getOrderDetails = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -101,7 +99,6 @@ export const payOrder = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -133,7 +130,6 @@ export const getUserOrdersList = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -165,7 +161,6 @@ export const getOrdersList = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -199,7 +194,6 @@ export const deliverOrder = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {

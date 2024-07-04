@@ -1,13 +1,24 @@
 import { createAppSlice } from '../createAppSlice';
 
 import {
-  getProducts,
-  getProduct,
+  listProducts,
+  productDetails,
   createProduct,
   uploadImage,
   updateProduct,
   deleteProduct,
+  createProductReview,
 } from './productActions';
+
+export type ReviewType = {
+  _id: number;
+  name: string;
+  rating: number;
+  comment: string;
+  // createdAt: string;
+  product: number;
+  user: number;
+};
 
 export type ProductType = {
   _id: number;
@@ -18,9 +29,11 @@ export type ProductType = {
   category: string;
   price: number;
   countInStock: number;
-  rating?: number;
-  numReviews?: number;
+  rating: number;
+  numReviews: number;
+  reviews: ReviewType[];
   createdAt: string;
+  user: number;
 };
 
 type ProductsSliceState = {
@@ -47,27 +60,27 @@ export const productsSlice = createAppSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getProducts.pending, (state) => {
+      .addCase(listProducts.pending, (state) => {
         state.error = null;
         state.loading = true;
       })
-      .addCase(getProducts.fulfilled, (state, action) => {
+      .addCase(listProducts.fulfilled, (state, action) => {
         state.loading = false;
         state.products = action.payload;
       })
-      .addCase(getProducts.rejected, (state, action) => {
+      .addCase(listProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-      .addCase(getProduct.pending, (state) => {
+      .addCase(productDetails.pending, (state) => {
         state.error = null;
         state.loading = true;
       })
-      .addCase(getProduct.fulfilled, (state, action) => {
+      .addCase(productDetails.fulfilled, (state, action) => {
         state.loading = false;
         state.product = action.payload;
       })
-      .addCase(getProduct.rejected, (state, action) => {
+      .addCase(productDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
@@ -117,6 +130,21 @@ export const productsSlice = createAppSlice({
         );
       })
       .addCase(deleteProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(createProductReview.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(createProductReview.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log('action', action);
+        // state.products = state.products.filter(
+        //   (el) => el._id !== action.payload
+        // );
+      })
+      .addCase(createProductReview.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

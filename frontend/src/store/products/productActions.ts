@@ -1,12 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-import { ProductType } from './productsSlice';
+import { ProductType, ReviewType } from './productsSlice';
 
 import axios from 'axios';
 
-export const getProducts = createAsyncThunk(
-  'products/getProducts',
+export const listProducts = createAsyncThunk(
+  'products/listProducts',
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(
@@ -24,8 +24,8 @@ export const getProducts = createAsyncThunk(
   }
 );
 
-export const getProduct = createAsyncThunk(
-  'products/getProduct',
+export const productDetails = createAsyncThunk(
+  'products/productDetails',
   async (id: number, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(
@@ -168,6 +168,44 @@ export const deleteProduct = createAsyncThunk(
         config
       );
       return id;
+    } catch (error) {
+      console.log('error register', error);
+      if (error.response && error.response.data.detail) {
+        return rejectWithValue(error.response.data.detail);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const createProductReview = createAsyncThunk(
+  'products/createProductReview',
+  async (
+    credentials: { id: number; review: ReviewType },
+    { getState, rejectWithValue }
+  ) => {
+    const state = getState() as RootState;
+    const token = state.user.userInfo?.token;
+
+    if (!token) {
+      return rejectWithValue('No user found');
+    }
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/products/${
+          credentials.id
+        }/reviews/`,
+        credentials.review,
+        config
+      );
+      console.log('data', data);
     } catch (error) {
       console.log('error register', error);
       if (error.response && error.response.data.detail) {

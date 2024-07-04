@@ -8,7 +8,7 @@ import {
   selectError,
 } from '../store/products/productsSlice';
 
-import { getProducts } from '../store/products/productActions';
+import { listProducts } from '../store/products/productActions';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -23,7 +23,7 @@ const HomePage: React.FC = () => {
   const error = useAppSelector(selectError);
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(listProducts());
   }, [dispatch]);
 
   return (

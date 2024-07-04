@@ -7,13 +7,14 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   selectProducts,
   selectLoading,
+  selectSuccess,
   selectError,
   selectProduct,
   clearProduct,
 } from '../store/products/productsSlice';
 
 import {
-  getProducts,
+  listProducts,
   deleteProduct,
   createProduct,
 } from '../store/products/productActions';
@@ -32,7 +33,7 @@ const ProductsListPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(clearProduct());
-    dispatch(getProducts());
+    dispatch(listProducts());
   }, [dispatch]);
 
   useEffect(() => {
@@ -62,17 +63,6 @@ const ProductsListPage: React.FC = () => {
           </Button>
         </Col>
       </Row>
-
-      {/* {loadingDelete && <Loader />}
-      {errorDelete && (
-        <Message variant="danger">{errorDelete}</Message>
-      )}
-
-      {loadingCreate && <Loader />}
-      {errorCreate && (
-        <Message variant="danger">{errorCreate}</Message>
-      )} */}
-
       {loading ? (
         <Loader />
       ) : error ? (

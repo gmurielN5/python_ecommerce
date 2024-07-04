@@ -1,6 +1,6 @@
 export const Rating: React.FC<{
   value: number;
-  text: string;
+  text?: string;
   color: string;
 }> = ({ value, text, color }) => {
   return (

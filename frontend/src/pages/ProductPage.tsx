@@ -1,4 +1,9 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import {
+  useState,
+  useEffect,
+  ChangeEvent,
+  SyntheticEvent,
+} from 'react';
 
 import { Link, useParams, useNavigate } from 'react-router-dom';
 
@@ -10,7 +15,9 @@ import {
   selectError,
 } from '../store/products/productsSlice';
 
-import { getProduct } from '../store/products/productActions';
+import { selectUser } from '../store/user/userSlice';
+
+import { productDetails } from '../store/products/productActions';
 
 import {
   Row,
@@ -24,7 +31,6 @@ import {
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
-
 import { Rating } from '../components/Rating';
 
 type Params = {
@@ -41,12 +47,13 @@ const ProductPage: React.FC = () => {
   const product = useAppSelector(selectProduct);
   const loading = useAppSelector(selectLoading);
   const error = useAppSelector(selectError);
+  const userInfo = useAppSelector(selectUser);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
-      dispatch(getProduct(Number(id)));
+      dispatch(productDetails(Number(id)));
     }
   }, [dispatch, id]);
 
@@ -56,6 +63,13 @@ const ProductPage: React.FC = () => {
 
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>): void => {
     setQty(parseInt(e.target.value));
+  };
+
+  console.log(product);
+
+  const submitHandler = (e: SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(e);
   };
 
   return (
@@ -170,19 +184,23 @@ const ProductPage: React.FC = () => {
               <Row>
                 <Col md={6}>
                   <h4>Reviews</h4>
-                  {/* {product.reviews.length === 0 && (
-                    <Message variant="info"><p>No Reviews</p></Message>
-                  )} */}
+                  {product.reviews.length === 0 && (
+                    <Message variant="info">
+                      <p>No Reviews</p>
+                    </Message>
+                  )}
 
                   <ListGroup variant="flush">
-                    {/* {product.reviews.map((review) => (
-                    <ListGroup.Item key={review._id}>
-                      <strong>{review.name}</strong>
-                      <Rating value={review.rating} color="#f8e825" />
-                      <p>{review.createdAt.substring(0, 10)}</p>
-                      <p>{review.comment}</p>
-                    </ListGroup.Item>
-                  ))} */}
+                    {product.reviews.map((review) => (
+                      <ListGroup.Item key={review._id}>
+                        <strong>{review.name}</strong>
+                        <Rating
+                          value={review.rating}
+                          color="#f8e825"
+                        />
+                        <p>{review.comment}</p>
+                      </ListGroup.Item>
+                    ))}
 
                     <ListGroup.Item>
                       <h4>Write a review</h4>
@@ -198,50 +216,55 @@ const ProductPage: React.FC = () => {
                         {errorProductReview}
                       </Message>
                     )} */}
-                      {/*
-                    {userInfo ? (
-                      <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="rating">
-                          <Form.Label>Rating</Form.Label>
-                          <Form.Control
-                            as="select"
-                            value={rating}
-                            onChange={(e) => setRating(e.target.value)}
+
+                      {userInfo ? (
+                        <Form onSubmit={submitHandler}>
+                          <Form.Group controlId="rating">
+                            <Form.Label>Rating</Form.Label>
+                            <Form.Control
+                              as="select"
+                              value={rating}
+                              onChange={(e) =>
+                                setRating(Number(e.target.value))
+                              }
+                            >
+                              <option value="">Select...</option>
+                              <option value="1">1 - Poor</option>
+                              <option value="2">2 - Fair</option>
+                              <option value="3">3 - Good</option>
+                              <option value="4">4 - Very Good</option>
+                              <option value="5">5 - Excellent</option>
+                            </Form.Control>
+                          </Form.Group>
+
+                          <Form.Group controlId="comment">
+                            <Form.Label>Review</Form.Label>
+                            <Form.Control
+                              as="textarea"
+                              row="5"
+                              value={comment}
+                              onChange={(e) =>
+                                setComment(e.target.value)
+                              }
+                            ></Form.Control>
+                          </Form.Group>
+
+                          <Button
+                            disabled={loading}
+                            type="submit"
+                            variant="primary"
                           >
-                            <option value="">Select...</option>
-                            <option value="1">1 - Poor</option>
-                            <option value="2">2 - Fair</option>
-                            <option value="3">3 - Good</option>
-                            <option value="4">4 - Very Good</option>
-                            <option value="5">5 - Excellent</option>
-                          </Form.Control>
-                        </Form.Group>
-
-                        <Form.Group controlId="comment">
-                          <Form.Label>Review</Form.Label>
-                          <Form.Control
-                            as="textarea"
-                            row="5"
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                          ></Form.Control>
-                        </Form.Group>
-
-                        <Button
-                          disabled={loadingProductReview}
-                          type="submit"
-                          variant="primary"
-                        >
-                          Submit
-                        </Button>
-                      </Form>
-                        ) : (
-
-                      <Message variant="info">
-                        Please <Link to="/login">login</Link> to write a
-                        review
-                      </Message>
-                    )} */}
+                            Submit
+                          </Button>
+                        </Form>
+                      ) : (
+                        <Message variant="info">
+                          <p>
+                            Please <Link to="/login">login</Link> to
+                            write a review
+                          </p>
+                        </Message>
+                      )}
                     </ListGroup.Item>
                   </ListGroup>
                 </Col>
