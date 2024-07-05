@@ -26,7 +26,6 @@ export const login = createAsyncThunk(
       const { _id, name, username, email, isAdmin, token } = data;
       return { _id, name, username, email, isAdmin, token };
     } catch (error) {
-      console.log('error', error.response.data.detail);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -55,7 +54,6 @@ export const register = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -101,7 +99,6 @@ export const updateUser = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {

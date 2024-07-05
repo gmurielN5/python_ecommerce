@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
@@ -7,10 +7,11 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   selectProducts,
   selectLoading,
-  selectSuccess,
   selectError,
   selectProduct,
   clearProduct,
+  selectPage,
+  selectPages,
 } from '../store/products/productsSlice';
 
 import {
@@ -21,6 +22,7 @@ import {
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
+import { Paginate } from '../components/Paginate';
 
 const ProductsListPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -28,13 +30,18 @@ const ProductsListPage: React.FC = () => {
   const productInfo = useAppSelector(selectProduct);
   const loading = useAppSelector(selectLoading);
   const error = useAppSelector(selectError);
+  const page = useAppSelector(selectPage);
+  const pages = useAppSelector(selectPages);
 
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const keyword = location.search;
 
   useEffect(() => {
     dispatch(clearProduct());
-    dispatch(listProducts());
-  }, [dispatch]);
+    dispatch(listProducts(keyword));
+  }, [dispatch, keyword]);
 
   useEffect(() => {
     if (productInfo) {
@@ -117,7 +124,7 @@ const ProductsListPage: React.FC = () => {
               ))}
             </tbody>
           </Table>
-          {/* <Paginate pages={pages} page={page} isAdmin={true} /> */}
+          <Paginate pages={pages} page={page} isAdmin={true} />
         </div>
       )}
     </div>

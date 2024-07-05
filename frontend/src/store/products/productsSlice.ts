@@ -3,6 +3,7 @@ import { createAppSlice } from '../createAppSlice';
 import {
   listProducts,
   productDetails,
+  listTopProducts,
   createProduct,
   uploadImage,
   updateProduct,
@@ -10,12 +11,11 @@ import {
   createProductReview,
 } from './productActions';
 
-export type ReviewType = {
+type ReviewType = {
   _id: number;
   name: string;
   rating: number;
   comment: string;
-  // createdAt: string;
   product: number;
   user: number;
 };
@@ -39,6 +39,9 @@ export type ProductType = {
 type ProductsSliceState = {
   products: ProductType[];
   product: ProductType | null;
+  topRatedProduct: ProductType[];
+  page: number;
+  pages: number;
   loading: boolean;
   error: string | null;
 };
@@ -46,6 +49,9 @@ type ProductsSliceState = {
 const initialState: ProductsSliceState = {
   products: [],
   product: null,
+  topRatedProduct: [],
+  page: 1,
+  pages: 1,
   loading: false,
   error: null,
 };
@@ -66,9 +72,23 @@ export const productsSlice = createAppSlice({
       })
       .addCase(listProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload;
+        state.products = action.payload.products;
+        state.page = action.payload.page;
+        state.pages = action.payload.pages;
       })
       .addCase(listProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(listTopProducts.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(listTopProducts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.topRatedProduct = action.payload;
+      })
+      .addCase(listTopProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
@@ -139,10 +159,7 @@ export const productsSlice = createAppSlice({
       })
       .addCase(createProductReview.fulfilled, (state, action) => {
         state.loading = false;
-        console.log('action', action);
-        // state.products = state.products.filter(
-        //   (el) => el._id !== action.payload
-        // );
+        state.product = action.payload;
       })
       .addCase(createProductReview.rejected, (state, action) => {
         state.loading = false;
@@ -152,6 +169,9 @@ export const productsSlice = createAppSlice({
   selectors: {
     selectProducts: (products) => products.products,
     selectProduct: (products) => products.product,
+    selectTopRated: (products) => products.topRatedProduct,
+    selectPage: (products) => products.page,
+    selectPages: (products) => products.pages,
     selectLoading: (products) => products.loading,
     selectError: (products) => products.error,
   },
@@ -160,6 +180,9 @@ export const productsSlice = createAppSlice({
 export const {
   selectProducts,
   selectProduct,
+  selectTopRated,
+  selectPage,
+  selectPages,
   selectLoading,
   selectError,
 } = productsSlice.selectors;

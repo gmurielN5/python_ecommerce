@@ -24,7 +24,6 @@ export const addToCart = createAsyncThunk(
         quantity: credentials.quantity,
       };
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {

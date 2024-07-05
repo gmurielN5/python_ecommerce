@@ -17,7 +17,10 @@ import {
 
 import { selectUser } from '../store/user/userSlice';
 
-import { productDetails } from '../store/products/productActions';
+import {
+  productDetails,
+  createProductReview,
+} from '../store/products/productActions';
 
 import {
   Row,
@@ -65,11 +68,20 @@ const ProductPage: React.FC = () => {
     setQty(parseInt(e.target.value));
   };
 
-  console.log(product);
-
   const submitHandler = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e);
+    const productId = Number(id);
+    dispatch(
+      createProductReview({
+        id: productId,
+        review: {
+          rating,
+          comment,
+        },
+      })
+    );
+    setRating(0);
+    setComment('');
   };
 
   return (
@@ -204,19 +216,6 @@ const ProductPage: React.FC = () => {
 
                     <ListGroup.Item>
                       <h4>Write a review</h4>
-
-                      {/* {loadingProductReview && <Loader />}
-                    {successProductReview && (
-                      <Message variant="success">
-                        Review Submitted
-                      </Message>
-                    )}
-                    {errorProductReview && (
-                      <Message variant="danger">
-                        {errorProductReview}
-                      </Message>
-                    )} */}
-
                       {userInfo ? (
                         <Form onSubmit={submitHandler}>
                           <Form.Group controlId="rating">

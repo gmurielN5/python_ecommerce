@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom';
 import { logout } from '../store/user/userSlice';
 import { clearCart } from '../store/cart/cartSlice';
 import { clearOrderItem } from '../store/order/orderSlice';
+import { selectUser } from '../store/user/userSlice';
 
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 
-import { selectUser } from '../store/user/userSlice';
+import { Search } from './Search';
 
 // import SearchBox from './SearchBox';
 
@@ -30,7 +31,7 @@ export const Header: React.FC = () => {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            {/* <SearchBox /> */}
+            <Search />
             <Nav className="ml-auto">
               <Nav.Link as={Link} to="/cart">
                 <i className="fas fa-shopping-cart pe-2"></i>Cart

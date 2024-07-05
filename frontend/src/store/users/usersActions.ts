@@ -27,7 +27,6 @@ export const getUsersList = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -59,7 +58,6 @@ export const getUserProfile = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -97,7 +95,6 @@ export const updateUserProfile = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -129,7 +126,6 @@ export const deleteUser = createAsyncThunk(
       );
       return id;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {

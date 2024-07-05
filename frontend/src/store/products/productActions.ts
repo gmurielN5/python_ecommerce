@@ -1,20 +1,45 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-import { ProductType, ReviewType } from './productsSlice';
+import { ProductType } from './productsSlice';
 
 import axios from 'axios';
 
+type ReviewType = {
+  rating: number;
+  comment: string;
+};
+
 export const listProducts = createAsyncThunk(
   'products/listProducts',
-  async (_, { rejectWithValue }) => {
+  async (keyword: string, { rejectWithValue }) => {
+    if (!keyword) {
+      keyword = '';
+    }
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/products`
+        `${import.meta.env.VITE_API_URL}/products${keyword}`
       );
       return data;
     } catch (error) {
-      console.log('error', error.response.data.detail);
+      if (error.response && error.response.data.detail) {
+        return rejectWithValue(error.response.data.detail);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const listTopProducts = createAsyncThunk(
+  'products/listTopProducts',
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/products/top/`
+      );
+      return data;
+    } catch (error) {
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -33,7 +58,6 @@ export const productDetails = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error', error.response.data.detail);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -66,7 +90,6 @@ export const createProduct = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -99,7 +122,6 @@ export const uploadImage = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -137,7 +159,6 @@ export const updateProduct = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -169,7 +190,6 @@ export const deleteProduct = createAsyncThunk(
       );
       return id;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {
@@ -187,7 +207,6 @@ export const createProductReview = createAsyncThunk(
   ) => {
     const state = getState() as RootState;
     const token = state.user.userInfo?.token;
-
     if (!token) {
       return rejectWithValue('No user found');
     }
@@ -205,9 +224,8 @@ export const createProductReview = createAsyncThunk(
         credentials.review,
         config
       );
-      console.log('data', data);
+      return data;
     } catch (error) {
-      console.log('error register', error);
       if (error.response && error.response.data.detail) {
         return rejectWithValue(error.response.data.detail);
       } else {

@@ -29,7 +29,6 @@ export const Rating: React.FC<{
           }
         ></i>
       </span>
-
       <span>
         <i
           style={{ color }}
