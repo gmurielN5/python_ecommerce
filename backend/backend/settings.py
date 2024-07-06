@@ -120,6 +120,14 @@ DATABASES = {
     'default': dj_database_url.config(default=DATABASE_URL)
 }
 
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         # Replace this value with your local database's connection string.
+#         default='postgresql://elem_db_user:Ye0OhauauSghcZb2O2MNoBIA0qY6tojC@dpg-cq4hssmehbks73bbtn90-a.frankfurt-postgres.render.com/elem_db',
+#         conn_max_age=600
+#     )
+# }
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
