@@ -29,7 +29,8 @@ SECRET_KEY = 'django-insecure-wv)lizme_(54)bl$*#ns64qa3&addp2sg!o=23o&4#x$1pb&xh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
+                 'python-ecommerce-2.onrender.com', 'python-ecommerce.onrender.com']
 
 
 # Application definition
