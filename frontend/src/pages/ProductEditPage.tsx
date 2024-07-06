@@ -1,9 +1,4 @@
-import {
-  SyntheticEvent,
-  ChangeEvent,
-  useEffect,
-  useState,
-} from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
@@ -69,7 +64,7 @@ const ProductEditPage: React.FC = () => {
     }
   };
 
-  const submitHandler = (e: SyntheticEvent<HTMLFormElement>) => {
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const productId = Number(id);
     dispatch(
@@ -85,13 +80,15 @@ const ProductEditPage: React.FC = () => {
         createdAt: '',
       })
     );
-    if (imageFile) {
-      const formData = new FormData();
-
-      formData.append('image', imageFile);
-      formData.append('product_id', id as string);
-      dispatch(uploadImage(formData));
+    if (!imageFile) {
+      return;
     }
+    const formData = new FormData();
+    console.log(formData);
+
+    formData.append('image', imageFile);
+    formData.append('product_id', id as string);
+    dispatch(uploadImage(formData));
   };
 
   const handleBackClick = () => {
@@ -138,7 +135,7 @@ const ProductEditPage: React.FC = () => {
             <Form.Control
               type="file"
               accept="image/*"
-              onChange={(e) => handleFileChange(e)}
+              onChange={handleFileChange}
             />
           </Form.Group>
           {image && (

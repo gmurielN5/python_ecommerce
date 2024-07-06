@@ -1,3 +1,4 @@
+import { PayloadAction } from '@reduxjs/toolkit';
 import { createAppSlice } from '../createAppSlice';
 
 import {
@@ -25,9 +26,9 @@ export type OrderType = {
   paidAt: string;
   paymentMethod: string;
   shippingAddress: ShippingAddressType;
-  shippingPrice: string;
-  taxPrice: string;
-  totalPrice: string;
+  shippingPrice: number;
+  taxPrice: number;
+  totalPrice: number;
   user: UserType;
 };
 
@@ -62,11 +63,14 @@ export const orderSlice = createAppSlice({
       .addCase(createOrder.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createOrder.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.order = action.payload;
-      })
+      .addCase(
+        createOrder.fulfilled,
+        (state, action: PayloadAction<OrderType>) => {
+          state.loading = false;
+          state.success = true;
+          state.order = action.payload;
+        }
+      )
       .addCase(createOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
@@ -74,10 +78,13 @@ export const orderSlice = createAppSlice({
       .addCase(getOrderDetails.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getOrderDetails.fulfilled, (state, action) => {
-        state.loading = false;
-        state.order = action.payload;
-      })
+      .addCase(
+        getOrderDetails.fulfilled,
+        (state, action: PayloadAction<OrderType>) => {
+          state.loading = false;
+          state.order = action.payload;
+        }
+      )
       .addCase(getOrderDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
@@ -109,7 +116,7 @@ export const orderSlice = createAppSlice({
       })
       .addCase(payOrder.fulfilled, (state) => {
         state.loading = false;
-        state.order.isPaid = true;
+        state.order?.isPaid ? true : false;
       })
       .addCase(payOrder.rejected, (state, action) => {
         state.loading = false;
@@ -120,7 +127,7 @@ export const orderSlice = createAppSlice({
       })
       .addCase(deliverOrder.fulfilled, (state) => {
         state.loading = false;
-        state.order.isDelivered = true;
+        state.order?.isDelivered ? true : false;
       })
       .addCase(deliverOrder.rejected, (state, action) => {
         state.loading = false;

@@ -79,17 +79,19 @@ const PlaceOrderPage: React.FC = () => {
   }, [orderSuccess, orderDetail, navigate, dispatch]);
 
   const handleOrder = () => {
-    dispatch(
-      createOrder({
-        orderItems: cartItems,
-        shippingAddress: shippingAddress,
-        paymentMethod: paymentMethod,
-        itemsPrice: itemsPrice,
-        shippingPrice: shippingPrice,
-        taxPrice: taxPrice,
-        totalPrice: totalPrice,
-      })
-    );
+    if (shippingAddress && paymentMethod) {
+      dispatch(
+        createOrder({
+          orderItems: cartItems,
+          shippingAddress: shippingAddress,
+          paymentMethod: paymentMethod,
+          itemsPrice: itemsPrice,
+          shippingPrice: shippingPrice,
+          taxPrice: taxPrice,
+          totalPrice: totalPrice,
+        })
+      );
+    }
   };
 
   return (

@@ -3,42 +3,55 @@ import { RootState } from '../store';
 
 import axios from 'axios';
 
-export const login = createAsyncThunk(
+import { UserType } from './userSlice';
+
+type LoginArgs = {
+  email: string;
+  password: string;
+};
+
+type RegisterArgs = {
+  name: string;
+} & LoginArgs;
+
+export const login = createAsyncThunk<
+  UserType,
+  LoginArgs,
+  { rejectValue: string }
+>(
   'user/login',
-  async (
-    credentials: { email: string; password: string },
-    { rejectWithValue }
-  ) => {
+  async ({ email, password }: LoginArgs, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
           'Content-Type': 'application/json',
         },
       };
+      const info = { username: email, password: password };
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/users/login/`,
-        {
-          username: credentials.email,
-          password: credentials.password,
-        },
+        info,
         config
       );
-      const { _id, name, username, email, isAdmin, token } = data;
-      return { _id, name, username, email, isAdmin, token };
+      return data;
     } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(
+          error.response.data || 'Unknown error occurred'
+        );
       }
     }
   }
 );
 
-export const register = createAsyncThunk(
+export const register = createAsyncThunk<
+  UserType,
+  RegisterArgs,
+  { rejectValue: string }
+>(
   'user/register',
   async (
-    profileData: { name: string; email: string; password: string },
+    { name, email, password }: RegisterArgs,
     { rejectWithValue }
   ) => {
     try {
@@ -49,15 +62,19 @@ export const register = createAsyncThunk(
       };
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/users/register/`,
-        profileData,
+        {
+          name,
+          email,
+          password,
+        },
         config
       );
       return data;
     } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(
+          error.response.data || 'Unknown error occurred'
+        );
       }
     }
   }
@@ -72,38 +89,31 @@ export const updateUser = createAsyncThunk(
       email: string;
       password: string;
     },
-    { getState, rejectWithValue }
+    { getState }
   ) => {
     const state = getState() as RootState;
     const token = state.user.userInfo?.token;
 
     if (!token) {
-      return rejectWithValue('No user found');
+      throw new Error('No user found');
     }
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const { data } = await axios.put(
-        `${import.meta.env.VITE_API_URL}/users/profile/update/`,
-        {
-          id: credentials.id,
-          name: credentials.name,
-          email: credentials.email,
-          password: credentials.password,
-        },
-        config
-      );
-      return data;
-    } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.put(
+      `${import.meta.env.VITE_API_URL}/users/profile/update/`,
+      {
+        id: credentials.id,
+        name: credentials.name,
+        email: credentials.email,
+        password: credentials.password,
+      },
+      config
+    );
+    return data;
   }
 );

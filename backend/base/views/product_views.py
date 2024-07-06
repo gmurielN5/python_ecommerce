@@ -35,7 +35,7 @@ def getProducts(request):
         page = 1
 
     page = int(page)
-    print('Page:', page)
+
     serializer = ProductSerializer(products, many=True)
     return Response({'products': serializer.data, 'page': page, 'pages': paginator.num_pages})
 
@@ -124,13 +124,11 @@ def createProductReview(request, pk):
     # 1 - Review already exists
     alreadyExists = product.review_set.filter(user=user).exists()
     if alreadyExists:
-        content = {'detail': 'Product already reviewed'}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        return Response('Product already reviewed', status=status.HTTP_400_BAD_REQUEST)
 
     # 2 - No Rating or 0
     elif data['rating'] == 0:
-        content = {'detail': 'Please select a rating'}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        return Response('Please select a rating', status=status.HTTP_400_BAD_REQUEST)
 
     # 3 - Create review
     else:

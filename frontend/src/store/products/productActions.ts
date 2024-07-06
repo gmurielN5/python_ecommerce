@@ -10,103 +10,92 @@ type ReviewType = {
   comment: string;
 };
 
+type ProductReviewArgs = {
+  id: number;
+  review: ReviewType;
+};
+
+type ProductArgs = {
+  _id: number;
+  name: string;
+  price: number;
+  image: string;
+  brand: string;
+  category: string;
+  countInStock: number;
+  description: string;
+  createdAt: string;
+};
+
 export const listProducts = createAsyncThunk(
   'products/listProducts',
-  async (keyword: string, { rejectWithValue }) => {
+  async (keyword: string) => {
     if (!keyword) {
       keyword = '';
     }
-    try {
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/products${keyword}`
-      );
-      return data;
-    } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_URL}/products${keyword}`
+    );
+    return data;
   }
 );
 
 export const listTopProducts = createAsyncThunk(
   'products/listTopProducts',
-  async (_, { rejectWithValue }) => {
-    try {
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/products/top/`
-      );
-      return data;
-    } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
+  async () => {
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_URL}/products/top/`
+    );
+    return data;
   }
 );
 
 export const productDetails = createAsyncThunk(
   'products/productDetails',
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/products/${id}`
-      );
-      return data;
-    } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
+  async (id: number) => {
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_URL}/products/${id}`
+    );
+    return data;
   }
 );
 
 export const createProduct = createAsyncThunk(
   'products/createProduct',
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { getState }) => {
     const state = getState() as RootState;
     const token = state.user.userInfo?.token;
 
     if (!token) {
-      return rejectWithValue('No user found');
+      throw new Error('No user found');
     }
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/products/create/`,
-        {},
-        config
-      );
-      return data;
-    } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_API_URL}/products/create/`,
+      {},
+      config
+    );
+    return data;
   }
 );
 
-export const uploadImage = createAsyncThunk(
+export const uploadImage = createAsyncThunk<
+  string,
+  FormData,
+  { rejectValue: string }
+>(
   'products/uploadImage',
   async (formData, { getState, rejectWithValue }) => {
     const state = getState() as RootState;
     const token = state.user.userInfo?.token;
 
     if (!token) {
-      return rejectWithValue('No user found');
+      throw new Error('No user found');
     }
     try {
       const config = {
@@ -122,10 +111,10 @@ export const uploadImage = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(
+          error.response.data || 'Unknown error occurred'
+        );
       }
     }
   }
@@ -133,76 +122,61 @@ export const uploadImage = createAsyncThunk(
 
 export const updateProduct = createAsyncThunk(
   'products/updateProduct',
-  async (
-    productDetails: ProductType,
-    { getState, rejectWithValue }
-  ) => {
+  async (productDetails: ProductArgs, { getState }) => {
     const state = getState() as RootState;
     const token = state.user.userInfo?.token;
 
     if (!token) {
-      return rejectWithValue('No user found');
+      throw new Error('No user found');
     }
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const { data } = await axios.put(
-        `${import.meta.env.VITE_API_URL}/products/update/${
-          productDetails._id
-        }/`,
-        productDetails,
-        config
-      );
-      return data;
-    } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.put(
+      `${import.meta.env.VITE_API_URL}/products/update/${
+        productDetails._id
+      }/`,
+      productDetails,
+      config
+    );
+    return data;
   }
 );
 
 export const deleteProduct = createAsyncThunk(
   'products/deleteProduct',
-  async (id: number, { getState, rejectWithValue }) => {
+  async (id: number, { getState }) => {
     const state = getState() as RootState;
     const token = state.user.userInfo?.token;
 
     if (!token) {
-      return rejectWithValue('No user found');
+      throw new Error('No user found');
     }
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL}/products/delete/${id}/`,
-        config
-      );
-      return id;
-    } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios.delete(
+      `${import.meta.env.VITE_API_URL}/products/delete/${id}/`,
+      config
+    );
+    return id;
   }
 );
 
-export const createProductReview = createAsyncThunk(
+export const createProductReview = createAsyncThunk<
+  ProductType,
+  ProductReviewArgs,
+  { rejectValue: string }
+>(
   'products/createProductReview',
   async (
-    credentials: { id: number; review: ReviewType },
+    { id, review }: ProductReviewArgs,
     { getState, rejectWithValue }
   ) => {
     const state = getState() as RootState;
@@ -218,18 +192,16 @@ export const createProductReview = createAsyncThunk(
         },
       };
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/products/${
-          credentials.id
-        }/reviews/`,
-        credentials.review,
+        `${import.meta.env.VITE_API_URL}/products/${id}/reviews/`,
+        review,
         config
       );
       return data;
     } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(
+          error.response.data || 'Unknown error occurred'
+        );
       }
     }
   }

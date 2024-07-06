@@ -1,3 +1,5 @@
+import { PayloadAction } from '@reduxjs/toolkit';
+
 import { createAppSlice } from '../createAppSlice';
 
 import {
@@ -157,10 +159,13 @@ export const productsSlice = createAppSlice({
         state.error = null;
         state.loading = true;
       })
-      .addCase(createProductReview.fulfilled, (state, action) => {
-        state.loading = false;
-        state.product = action.payload;
-      })
+      .addCase(
+        createProductReview.fulfilled,
+        (state, action: PayloadAction<ProductType>) => {
+          state.loading = false;
+          state.product = action.payload;
+        }
+      )
       .addCase(createProductReview.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;

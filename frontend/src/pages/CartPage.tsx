@@ -49,21 +49,20 @@ const CartPage: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(addToCart({ id: id, quantity: qty }));
+      dispatch(addToCart({ id: Number(id), quantity: qty }));
     }
   }, [id, qty, dispatch]);
 
-  const removeFromCartHandler = (id: string) => {
+  const removeFromCartHandler = (id: number) => {
     dispatch(removeItem(id));
   };
 
-  const handleAddItem = (
-    e: ChangeEvent<HTMLSelectElement>,
-    id: string
-  ): void => {
-    dispatch(
-      addToCart({ id: id, quantity: parseInt(e.target.value) })
-    );
+  const handleChange = (
+    event: ChangeEvent<HTMLSelectElement>,
+    id: number
+  ) => {
+    const value = Number(event.target.value);
+    dispatch(addToCart({ id: id, quantity: value }));
   };
 
   return (
@@ -104,10 +103,11 @@ const CartPage: React.FC = () => {
                   <Col md={2}>${item.price}</Col>
 
                   <Col md={3}>
-                    <Form.Control
-                      as="select"
+                    <Form.Select
                       value={item.quantity}
-                      onChange={(e) => handleAddItem(e, item._id)}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                        handleChange(e, item._id)
+                      }
                     >
                       {[...Array(item.countInStock).keys()].map(
                         (x) => (
@@ -116,14 +116,16 @@ const CartPage: React.FC = () => {
                           </option>
                         )
                       )}
-                    </Form.Control>
+                    </Form.Select>
                   </Col>
 
                   <Col md={1}>
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => removeFromCartHandler(item._id)}
+                      onClick={() =>
+                        removeFromCartHandler(Number(item._id))
+                      }
                     >
                       <i className="fas fa-trash"></i>
                     </Button>

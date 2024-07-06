@@ -10,6 +10,7 @@ import {
 export type UserProfileType = {
   _id: number;
   name: string;
+  email?: string;
   username: string;
   isAdmin: boolean;
 };

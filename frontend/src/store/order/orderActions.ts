@@ -3,14 +3,32 @@ import { RootState } from '../store';
 
 import axios from 'axios';
 
+import {
+  CartItemsType,
+  ShippingAddressType,
+} from '../cart/cartSlice';
+
 import { OrderType } from './orderSlice';
 
-export const createOrder = createAsyncThunk(
+type OrderArgs = {
+  orderItems: CartItemsType[];
+  shippingAddress: ShippingAddressType;
+  paymentMethod: string;
+  itemsPrice: number;
+  shippingPrice: number;
+  taxPrice: number;
+  totalPrice: number;
+};
+
+export const createOrder = createAsyncThunk<
+  OrderType,
+  OrderArgs,
+  { rejectValue: string }
+>(
   'order/createOrder',
-  async (orderDetails: OrderType, { getState, rejectWithValue }) => {
+  async (orderDetails: OrderArgs, { getState, rejectWithValue }) => {
     const state = getState() as RootState;
     const token = state.user.userInfo?.token;
-
     if (!token) {
       return rejectWithValue('No user found');
     }
@@ -28,18 +46,22 @@ export const createOrder = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(
+          error.response.data || 'Unknown error occurred'
+        );
       }
     }
   }
 );
 
-export const getOrderDetails = createAsyncThunk(
+export const getOrderDetails = createAsyncThunk<
+  OrderType,
+  number,
+  { rejectValue: string }
+>(
   'order/getOrderDetails',
-  async (id: string, { getState, rejectWithValue }) => {
+  async (id: number, { getState, rejectWithValue }) => {
     const state = getState() as RootState;
     const token = state.user.userInfo?.token;
 
@@ -59,10 +81,10 @@ export const getOrderDetails = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(
+          error.response.data || 'Unknown error occurred'
+        );
       }
     }
   }
@@ -71,134 +93,101 @@ export const getOrderDetails = createAsyncThunk(
 export const payOrder = createAsyncThunk(
   'order/payOrder',
   async (
-    credentials: { id: string; details: any; data: any },
-    { getState, rejectWithValue }
+    credentials: { id: number; details: any; data: any },
+    { getState }
   ) => {
     const state = getState() as RootState;
     const token = state.user.userInfo?.token;
 
     if (!token) {
-      return rejectWithValue('No user found');
+      throw new Error('No user found');
     }
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const { data } = await axios.put(
-        `${import.meta.env.VITE_API_URL}/orders/${
-          credentials.id
-        }/pay/`,
-        {
-          detail: credentials.details,
-          data: credentials.data,
-        },
-        config
-      );
-      return data;
-    } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.put(
+      `${import.meta.env.VITE_API_URL}/orders/${credentials.id}/pay/`,
+      {
+        detail: credentials.details,
+        data: credentials.data,
+      },
+      config
+    );
+    return data;
   }
 );
 
 export const getUserOrdersList = createAsyncThunk(
   'order/getUserOrdersList',
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { getState }) => {
     const state = getState() as RootState;
     const token = state.user.userInfo?.token;
 
     if (!token) {
-      return rejectWithValue('No user found');
+      throw new Error('No user found');
     }
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/orders/myorders/`,
-        config
-      );
-      return data;
-    } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_URL}/orders/myorders/`,
+      config
+    );
+    return data;
   }
 );
 
 export const getOrdersList = createAsyncThunk(
   'order/getOrdersList',
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { getState }) => {
     const state = getState() as RootState;
     const token = state.user.userInfo?.token;
 
     if (!token) {
-      return rejectWithValue('No user found');
+      throw new Error('No user found');
     }
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/orders/`,
-        config
-      );
-      return data;
-    } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_URL}/orders/`,
+      config
+    );
+    return data;
   }
 );
 
 export const deliverOrder = createAsyncThunk(
   'order/deliverOrder',
-  async (orderDetails: OrderType, { getState, rejectWithValue }) => {
+  async (orderDetails: OrderType, { getState }) => {
     const state = getState() as RootState;
     const token = state.user.userInfo?.token;
     if (!token) {
-      return rejectWithValue('No user found');
+      throw new Error('No user found');
     }
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const { data } = await axios.put(
-        `${import.meta.env.VITE_API_URL}/orders/${
-          orderDetails._id
-        }/deliver/`,
-        {},
-        config
-      );
-      return data;
-    } catch (error) {
-      if (error.response && error.response.data.detail) {
-        return rejectWithValue(error.response.data.detail);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.put(
+      `${import.meta.env.VITE_API_URL}/orders/${
+        orderDetails._id
+      }/deliver/`,
+      {},
+      config
+    );
+    return data;
   }
 );

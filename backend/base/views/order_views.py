@@ -20,7 +20,7 @@ def addOrderItems(request):
     orderItems = data['orderItems']
 
     if orderItems and len(orderItems) == 0:
-        return Response({'detail': 'No Order Items'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response('No Order Items', status=status.HTTP_400_BAD_REQUEST)
 
     # (1) Create order
 
@@ -92,12 +92,10 @@ def getOrderById(request, pk):
             serializer = OrderSerializer(order, many=False)
             return Response(serializer.data)
 
-        message = {'detail': 'Not authorized to view order'}
-        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+        return Response('Not authorized to view order', status=status.HTTP_400_BAD_REQUEST)
 
     except:
-        message = {'detail': 'Order does not exist'}
-        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+        return Response('Order does not exist', status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['PUT'])

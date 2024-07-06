@@ -158,10 +158,9 @@ const ProductPage: React.FC = () => {
                           <Row>
                             <Col>Qty</Col>
                             <Col xs="auto" className="my-1">
-                              <Form.Control
-                                as="select"
+                              <Form.Select
                                 value={qty}
-                                onChange={(e) => handleSelect(e)}
+                                onChange={handleSelect}
                               >
                                 {[
                                   ...Array(
@@ -172,7 +171,7 @@ const ProductPage: React.FC = () => {
                                     {x + 1}
                                   </option>
                                 ))}
-                              </Form.Control>
+                              </Form.Select>
                             </Col>
                           </Row>
                         </ListGroup.Item>
@@ -240,7 +239,7 @@ const ProductPage: React.FC = () => {
                             <Form.Label>Review</Form.Label>
                             <Form.Control
                               as="textarea"
-                              row="5"
+                              rows={5}
                               value={comment}
                               onChange={(e) =>
                                 setComment(e.target.value)

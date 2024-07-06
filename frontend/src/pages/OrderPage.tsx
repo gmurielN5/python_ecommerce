@@ -3,11 +3,11 @@ import { Link, useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
-import PayPalButton from '../utils/PaypalButton';
+// import PayPalButton from '../components/PaypalButton';
 
 import {
   getOrderDetails,
-  payOrder,
+  // payOrder,
   deliverOrder,
 } from '../store/order/orderActions';
 
@@ -59,16 +59,22 @@ const OrderPage: React.FC = () => {
   useEffect(() => {
     if (id) {
       if (!order || order._id !== Number(id)) {
-        dispatch(getOrderDetails(id));
+        const orderId = Number(id);
+        dispatch(getOrderDetails(orderId));
       }
     }
   }, [order, id, dispatch]);
 
-  const successPaymentHandler = (details: any, data: any) => {
-    dispatch(payOrder({ id: id, details: details, data: data }));
-  };
+  // const successPaymentHandler = (details: any, data: any) => {
+  //   dispatch(
+  //     payOrder({ id: Number(id), details: details, data: data })
+  //   );
+  // };
 
   const deliverHandler = () => {
+    if (!order) {
+      return;
+    }
     dispatch(deliverOrder(order));
   };
 
@@ -213,14 +219,14 @@ const OrderPage: React.FC = () => {
                         </Row>
                       </ListGroup.Item>
 
-                      {!order.isPaid && (
+                      {/* {!order.isPaid && (
                         <ListGroup.Item>
                           <PayPalButton
                             amount={order?.totalPrice}
                             onSuccess={successPaymentHandler}
                           />
                         </ListGroup.Item>
-                      )}
+                      )} */}
                     </ListGroup>
 
                     {userInfo &&

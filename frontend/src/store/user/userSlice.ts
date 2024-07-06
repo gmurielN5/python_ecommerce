@@ -1,3 +1,4 @@
+import { PayloadAction } from '@reduxjs/toolkit';
 import { createAppSlice } from '../createAppSlice';
 
 import { login, register, updateUser } from './userActions';
@@ -37,10 +38,13 @@ export const userSlice = createAppSlice({
         state.error = null;
         state.loading = true;
       })
-      .addCase(login.fulfilled, (state, action) => {
-        state.userInfo = action.payload;
-        state.loading = false;
-      })
+      .addCase(
+        login.fulfilled,
+        (state, action: PayloadAction<UserType>) => {
+          state.userInfo = action.payload;
+          state.loading = false;
+        }
+      )
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
@@ -49,10 +53,13 @@ export const userSlice = createAppSlice({
         state.error = null;
         state.loading = true;
       })
-      .addCase(register.fulfilled, (state, action) => {
-        state.userInfo = action.payload;
-        state.loading = false;
-      })
+      .addCase(
+        register.fulfilled,
+        (state, action: PayloadAction<UserType>) => {
+          state.userInfo = action.payload;
+          state.loading = false;
+        }
+      )
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
