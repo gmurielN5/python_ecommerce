@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Table, Button, Row, Col } from 'react-bootstrap';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
@@ -20,9 +19,29 @@ import {
   createProduct,
 } from '../store/products/productActions';
 
+import {
+  Button,
+  Container,
+  Grid,
+  Typography,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+  IconButton,
+} from '@mui/material';
+
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { Paginate } from '../components/Paginate';
+
+import AddIcon from '@mui/icons-material/Add';
 
 const ProductsListPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -58,76 +77,78 @@ const ProductsListPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <Row className="align-items-center">
-        <Col>
-          <h1>Products</h1>
-        </Col>
+    <Container>
+      <Grid container alignItems="center" spacing={2} mb={2}>
+        <Grid item xs={6}>
+          <Typography component="h1" variant="h5">
+            Products
+          </Typography>
+        </Grid>
 
-        <Col className="text-right">
-          <Button className="my-3" onClick={createProductHandler}>
-            <i className="fas fa-plus"></i> Create Product
+        <Grid item xs={6} sx={{ textAlign: 'right' }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={createProductHandler}
+            startIcon={<AddIcon />}
+            sx={{ mt: 2 }}
+          >
+            Create Product
           </Button>
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">
+        <Message severity="error">
           <>{error}</>
         </Message>
       ) : (
-        <div>
-          <Table
-            striped
-            bordered
-            hover
-            responsive
-            className="table-sm"
-          >
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>PRICE</th>
-                <th>CATEGORY</th>
-                <th>BRAND</th>
-                <th></th>
-              </tr>
-            </thead>
-
-            <tbody>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>NAME</TableCell>
+                <TableCell>PRICE</TableCell>
+                <TableCell>CATEGORY</TableCell>
+                <TableCell>BRAND</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {products.map((product) => (
-                <tr key={product._id}>
-                  <td>{product._id}</td>
-                  <td>{product.name}</td>
-                  <td>${product.price}</td>
-                  <td>{product.category}</td>
-                  <td>{product.brand}</td>
-
-                  <td>
+                <TableRow key={product._id}>
+                  <TableCell>{product._id}</TableCell>
+                  <TableCell>{product.name}</TableCell>
+                  <TableCell>{product.price}</TableCell>
+                  <TableCell>{product.category}</TableCell>
+                  <TableCell>{product.brand}</TableCell>
+                  <TableCell>{product.brand}</TableCell>
+                  <TableCell>
                     <Link to={`/admin/product/${product._id}/edit`}>
-                      <Button variant="light" className="btn-sm">
-                        <i className="fas fa-edit"></i>
-                      </Button>
+                      <IconButton color="primary" size="small">
+                        <EditIcon />
+                      </IconButton>
                     </Link>
-
-                    <Button
-                      variant="danger"
-                      className="btn-sm"
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="primary"
+                      size="small"
                       onClick={() => deleteHandler(product._id)}
                     >
-                      <i className="fas fa-trash"></i>
-                    </Button>
-                  </td>
-                </tr>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
+            </TableBody>
           </Table>
           <Paginate pages={pages} page={page} isAdmin={true} />
-        </div>
+        </TableContainer>
       )}
-    </div>
+    </Container>
   );
 };
 

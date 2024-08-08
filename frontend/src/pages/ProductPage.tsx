@@ -30,11 +30,12 @@ import {
   Button,
   Card,
   Form,
+  Container,
 } from 'react-bootstrap';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
-import { Rating } from '../components/Rating';
+import { BasicRating } from '../components/Rating';
 
 type Params = {
   id: string;
@@ -86,17 +87,15 @@ const ProductPage: React.FC = () => {
 
   return (
     <div>
-      <Link to="/" className="btn btn-light my-3">
-        Go Back
-      </Link>
+      <Link to="/">Go Back</Link>
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">
+        <Message severity="error">
           <>{error}</>
         </Message>
       ) : (
-        <div>
+        <Container>
           {!product ? null : (
             <>
               <Row>
@@ -107,17 +106,16 @@ const ProductPage: React.FC = () => {
                     fluid
                   />
                 </Col>
-                <Col md={3}>
+                <Col md={6}>
                   <ListGroup variant="flush">
                     <ListGroup.Item>
                       <h3>{product.name}</h3>
                     </ListGroup.Item>
 
                     <ListGroup.Item>
-                      <Rating
+                      <BasicRating
                         value={product.rating}
                         text={`${product.numReviews} reviews`}
-                        color={'#f8e825'}
                       />
                     </ListGroup.Item>
 
@@ -129,9 +127,7 @@ const ProductPage: React.FC = () => {
                       Description: {product.description}
                     </ListGroup.Item>
                   </ListGroup>
-                </Col>
 
-                <Col md={3}>
                   <Card>
                     <ListGroup variant="flush">
                       <ListGroup.Item>
@@ -196,7 +192,7 @@ const ProductPage: React.FC = () => {
                 <Col md={6}>
                   <h4>Reviews</h4>
                   {product.reviews.length === 0 && (
-                    <Message variant="info">
+                    <Message severity="info">
                       <p>No Reviews</p>
                     </Message>
                   )}
@@ -205,10 +201,7 @@ const ProductPage: React.FC = () => {
                     {product.reviews.map((review) => (
                       <ListGroup.Item key={review._id}>
                         <strong>{review.name}</strong>
-                        <Rating
-                          value={review.rating}
-                          color="#f8e825"
-                        />
+                        <BasicRating value={review.rating} />
                         <p>{review.comment}</p>
                       </ListGroup.Item>
                     ))}
@@ -256,7 +249,7 @@ const ProductPage: React.FC = () => {
                           </Button>
                         </Form>
                       ) : (
-                        <Message variant="info">
+                        <Message severity="info">
                           <p>
                             Please <Link to="/login">login</Link> to
                             write a review
@@ -269,7 +262,7 @@ const ProductPage: React.FC = () => {
               </Row>
             </>
           )}
-        </div>
+        </Container>
       )}
     </div>
   );

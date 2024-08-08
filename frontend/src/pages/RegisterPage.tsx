@@ -2,7 +2,6 @@ import { useState, SyntheticEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import { Link, useLocation, Navigate } from 'react-router-dom';
-import { Form, Button, Row, Col } from 'react-bootstrap';
 
 import {
   selectUser,
@@ -11,6 +10,14 @@ import {
 } from '../store/user/userSlice';
 
 import { register } from '../store/user/userActions';
+
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+} from '@mui/material';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -42,81 +49,98 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <>
+    <Container component="main" maxWidth="sm">
       {user && <Navigate to="/" replace={true} />}
-      <h1>Register</h1>
+      <Typography component="h1" variant="h5">
+        Register
+      </Typography>
+
       {message && (
-        <Message variant="danger">
+        <Message severity="error">
           <p>{message}</p>
         </Message>
       )}
       {error && (
-        <Message variant="danger">
+        <Message severity="error">
           <p>{error}</p>
         </Message>
       )}
       {loading && <Loader />}
-      <Form onSubmit={submitHandler}>
-        <Form.Group controlId="name">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            required
-            type="name"
-            placeholder="Enter name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="email">
-          <Form.Label>Email Address</Form.Label>
-          <Form.Control
-            required
-            type="email"
-            placeholder="Enter Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            required
-            type="password"
-            placeholder="Enter Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="passwordConfirm">
-          <Form.Label>Confirm Password</Form.Label>
-          <Form.Control
-            required
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Button type="submit" variant="primary">
+      <form onSubmit={submitHandler}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              id="name"
+              label="Name"
+              name="name"
+              autoComplete="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              name="passwordConfirm"
+              label="Confirm Password"
+              type="password"
+              id="passwordConfirm"
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </Grid>
+        </Grid>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          sx={{ mt: 3, mb: 2 }}
+        >
           Register
         </Button>
-      </Form>
+      </form>
 
-      <Row className="py-3">
-        <Col>
+      <Grid container justifyContent="flex-end">
+        <Grid item>
           Have an Account?{' '}
           <Link
             to={redirect ? `/login?redirect=${redirect}` : '/login'}
           >
             Sign In
           </Link>
-        </Col>
-      </Row>
-    </>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

@@ -18,14 +18,20 @@ import {
 } from '../store/cart/cartSlice';
 
 import {
-  Row,
-  Col,
-  ListGroup,
-  Image,
-  Form,
+  Container,
+  Grid,
+  Typography,
+  List,
+  ListItem,
   Button,
+  Select,
+  MenuItem,
   Card,
-} from 'react-bootstrap';
+  CardContent,
+  CardActions,
+} from '@mui/material';
+
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -66,112 +72,112 @@ const CartPage: React.FC = () => {
   };
 
   return (
-    <Row>
-      <Col md={8}>
-        <h1>Shopping Cart</h1>
-        {loading && <Loader />}
-        {error && (
-          <Message variant="danger">
-            <>{error}</>
-          </Message>
-        )}
-        {cartItems.length === 0 ? (
-          <Message variant="info">
-            <p>
-              Your cart is empty <Link to="/">Go Back</Link>
-            </p>
-          </Message>
-        ) : (
-          <ListGroup variant="flush">
-            {cartItems.map((item) => (
-              <ListGroup.Item key={item._id}>
-                <Row>
-                  <Col md={2}>
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      fluid
-                      rounded
-                    />
-                  </Col>
-                  <Col md={3}>
-                    <Link to={`/product/${item._id}`}>
-                      {item.name}
-                    </Link>
-                  </Col>
+    <Container>
+      <Grid container spacing={2}>
+        <Grid item md={8}>
+          <Typography variant="h4">Shopping Cart</Typography>
+          {loading && <Loader />}
+          {error && (
+            <Message severity="error">
+              <>{error}</>
+            </Message>
+          )}
+          {cartItems.length === 0 ? (
+            <Message severity="info">
+              <p>
+                Your cart is empty <Link to="/">Go Back</Link>
+              </p>
+            </Message>
+          ) : (
+            <List>
+              {cartItems.map((item) => (
+                <ListItem key={item._id}>
+                  <Grid container spacing={2} alignItems="center">
+                    <Grid item md={2}>
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        style={{ width: '100%', borderRadius: '4px' }}
+                      />
+                    </Grid>
+                    <Grid item md={3}>
+                      <Link to={`/product/${item._id}`}>
+                        {item.name}
+                      </Link>
+                    </Grid>
+                    <Grid item md={2}>
+                      ${item.price}
+                    </Grid>
+                    <Grid item md={3}>
+                      <Select
+                        value={item.quantity}
+                        onChange={(e) => handleChange(e, item._id)}
+                        fullWidth
+                      >
+                        {[...Array(item.countInStock).keys()].map(
+                          (x) => (
+                            <MenuItem key={x + 1} value={x + 1}>
+                              {x + 1}
+                            </MenuItem>
+                          )
+                        )}
+                      </Select>
+                    </Grid>
+                    <Grid item md={1}>
+                      <Button
+                        type="button"
+                        color="secondary"
+                        onClick={() =>
+                          removeFromCartHandler(Number(item._id))
+                        }
+                      >
+                        <DeleteIcon />
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </Grid>
 
-                  <Col md={2}>${item.price}</Col>
-
-                  <Col md={3}>
-                    <Form.Select
-                      value={item.quantity}
-                      onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                        handleChange(e, item._id)
-                      }
-                    >
-                      {[...Array(item.countInStock).keys()].map(
-                        (x) => (
-                          <option key={x + 1} value={x + 1}>
-                            {x + 1}
-                          </option>
-                        )
-                      )}
-                    </Form.Select>
-                  </Col>
-
-                  <Col md={1}>
-                    <Button
-                      type="button"
-                      variant="light"
-                      onClick={() =>
-                        removeFromCartHandler(Number(item._id))
-                      }
-                    >
-                      <i className="fas fa-trash"></i>
-                    </Button>
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        )}
-      </Col>
-
-      <Col md={4}>
-        <Card>
-          <ListGroup variant="flush">
-            <ListGroup.Item>
-              <h2>
+        <Grid item md={4}>
+          <Card>
+            <CardContent>
+              <Typography variant="h5">
                 Subtotal (
                 {cartItems.reduce(
                   (acc, item) => acc + item.quantity,
                   0
                 )}
                 ) items
-              </h2>
-              $
-              {cartItems
-                .reduce(
-                  (acc, item) => acc + item.quantity * item.price,
-                  0
-                )
-                .toFixed(2)}
-            </ListGroup.Item>
-          </ListGroup>
-
-          <ListGroup.Item>
-            <Button
-              type="button"
-              className="btn-block"
-              disabled={cartItems.length === 0}
-              onClick={() => navigate('/shipping')}
-            >
-              Proceed To Checkout
-            </Button>
-          </ListGroup.Item>
-        </Card>
-      </Col>
-    </Row>
+              </Typography>
+              <Typography variant="h6">
+                $
+                {cartItems
+                  .reduce(
+                    (acc, item) => acc + item.quantity * item.price,
+                    0
+                  )
+                  .toFixed(2)}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button
+                type="button"
+                fullWidth
+                variant="contained"
+                color="primary"
+                disabled={cartItems.length === 0}
+                onClick={() => navigate('/shipping')}
+              >
+                Proceed To Checkout
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

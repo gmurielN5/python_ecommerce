@@ -1,6 +1,5 @@
 import { useState, SyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
@@ -8,6 +7,14 @@ import {
   selectShippingAddress,
   addShippingAddress,
 } from '../store/cart/cartSlice';
+
+import {
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 import { CheckoutSteps } from '../components/CheckoutSteps';
 
@@ -38,59 +45,78 @@ const ShippingPage: React.FC = () => {
   };
 
   return (
-    <>
+    <Container>
       <CheckoutSteps step1 step2 />
-      <h1>Shipping</h1>
-      <Form onSubmit={submitHandler}>
-        <Form.Group controlId="address">
-          <Form.Label>Address</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Enter address"
-            value={address ? address : ''}
-            onChange={(e) => setAddress(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="city">
-          <Form.Label>City</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Enter city"
-            value={city ? city : ''}
-            onChange={(e) => setCity(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="postalCode">
-          <Form.Label>Postal Code</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Enter postal code"
-            value={postalCode ? postalCode : ''}
-            onChange={(e) => setPostalCode(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="country">
-          <Form.Label>Country</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Enter country"
-            value={country ? country : ''}
-            onChange={(e) => setCountry(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Button type="submit" variant="primary">
-          Continue
-        </Button>
-      </Form>
-    </>
+      <Container component="main" maxWidth="sm">
+        <Typography component="h1" variant="h5">
+          Shipping
+        </Typography>
+        <form onSubmit={submitHandler}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="address"
+                label="Address"
+                name="address"
+                placeholder="Enter address"
+                value={address || ''}
+                onChange={(e) => setAddress(e.target.value)}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="city"
+                label="City"
+                name="city"
+                placeholder="Enter city"
+                value={city || ''}
+                onChange={(e) => setCity(e.target.value)}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="postalCode"
+                label="Postal Code"
+                name="postalCode"
+                placeholder="Enter postal code"
+                value={postalCode || ''}
+                onChange={(e) => setPostalCode(e.target.value)}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="country"
+                label="Country"
+                name="country"
+                placeholder="Enter country"
+                value={country || ''}
+                onChange={(e) => setCountry(e.target.value)}
+                margin="normal"
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
+          >
+            Continue
+          </Button>
+        </form>
+      </Container>
+    </Container>
   );
 };
 export default ShippingPage;

@@ -20,13 +20,20 @@ import { createOrder } from '../store/order/orderActions';
 import { clearCart } from '../store/cart/cartSlice';
 
 import {
-  Button,
-  Row,
-  Col,
-  ListGroup,
-  Image,
+  Container,
+  Grid,
+  Typography,
   Card,
-} from 'react-bootstrap';
+  CardContent,
+  CardActions,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+  Divider,
+} from '@mui/material';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -95,137 +102,153 @@ const PlaceOrderPage: React.FC = () => {
   };
 
   return (
-    <>
+    <Container>
       {orderLoading ? (
         <Loader />
       ) : (
-        <div>
+        <>
           <CheckoutSteps step1 step2 step3 step4 />
-          <Row>
-            <Col md={8}>
-              <ListGroup variant="flush">
-                <ListGroup.Item>
-                  <h2>Shipping</h2>
-                  {!shippingAddress ? null : (
-                    <p>
-                      <strong>Shipping: </strong>
-                      {shippingAddress.address}
-                      {shippingAddress.city}
-                      {shippingAddress.postalCode}
-                      {shippingAddress.country}
-                    </p>
-                  )}
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  <h2>Payment Method</h2>
-                  <p>
-                    <strong>Method: </strong>
-                    {paymentMethod}
-                  </p>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  <h2>Order Items</h2>
-                  {cartItems.length === 0 ? (
-                    <Message variant="info">
-                      <p>Your cart is empty</p>
-                    </Message>
-                  ) : (
-                    <ListGroup variant="flush">
-                      {cartItems.map((item, index) => (
-                        <ListGroup.Item key={index}>
-                          <Row>
-                            <Col md={1}>
-                              <Image
-                                src={item.image}
-                                alt={item.name}
-                                fluid
-                                rounded
-                              />
-                            </Col>
-
-                            <Col>
-                              <Link to={`/product/${item._id}`}>
-                                {item.name}
-                              </Link>
-                            </Col>
-
-                            <Col md={4}>
-                              {item.quantity} X ${item.price} = $
-                              {(item.quantity * item.price).toFixed(
-                                2
-                              )}
-                            </Col>
-                          </Row>
-                        </ListGroup.Item>
-                      ))}
-                    </ListGroup>
-                  )}
-                </ListGroup.Item>
-              </ListGroup>
-            </Col>
-
-            <Col md={4}>
-              <Card>
-                <ListGroup variant="flush">
-                  <ListGroup.Item>
-                    <h2>Order Summary</h2>
-                  </ListGroup.Item>
-
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Items:</Col>
-                      <Col>${itemsPrice}</Col>
-                    </Row>
-                  </ListGroup.Item>
-
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Shipping:</Col>
-                      <Col>${shippingPrice}</Col>
-                    </Row>
-                  </ListGroup.Item>
-
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Tax:</Col>
-                      <Col>${taxPrice}</Col>
-                    </Row>
-                  </ListGroup.Item>
-
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Total:</Col>
-                      <Col>${totalPrice}</Col>
-                    </Row>
-                  </ListGroup.Item>
-
-                  {orderError && (
-                    <ListGroup.Item>
-                      <Message variant="danger">
-                        <>{orderError}</>
+          <Container>
+            <Grid container spacing={2}>
+              <Grid item md={8}>
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography variant="h5">Shipping</Typography>
+                    {!shippingAddress ? null : (
+                      <>
+                        <Typography>
+                          <strong>Address: </strong>
+                          {shippingAddress.address}
+                        </Typography>
+                        <Typography>
+                          <strong>City: </strong>
+                          {shippingAddress.city}
+                        </Typography>
+                        <Typography>
+                          <strong>Postal Code: </strong>
+                          {shippingAddress.postalCode}
+                        </Typography>
+                        <Typography>
+                          <strong>Country: </strong>
+                          {shippingAddress.country}
+                        </Typography>
+                      </>
+                    )}
+                  </CardContent>
+                </Card>
+                <Card
+                  variant="outlined"
+                  style={{ marginTop: '16px' }}
+                >
+                  <CardContent>
+                    <Typography variant="h5">
+                      Payment Method
+                    </Typography>
+                    <Typography>
+                      <strong>Method: </strong>
+                      {paymentMethod}
+                    </Typography>
+                  </CardContent>
+                </Card>
+                <Card
+                  variant="outlined"
+                  style={{ marginTop: '16px' }}
+                >
+                  <CardContent>
+                    <Typography variant="h5">Order Items</Typography>
+                    {cartItems.length === 0 ? (
+                      <Message severity="info">
+                        <p>Your cart is empty</p>
                       </Message>
-                    </ListGroup.Item>
-                  )}
-
-                  <ListGroup.Item>
+                    ) : (
+                      <List>
+                        {cartItems.map((item, index) => (
+                          <>
+                            <ListItem
+                              alignItems="flex-start"
+                              key={index}
+                            >
+                              <ListItemAvatar>
+                                <Avatar
+                                  variant="rounded"
+                                  src={item.image}
+                                  alt={item.name}
+                                  sx={{ width: 56, height: 56 }}
+                                />
+                              </ListItemAvatar>
+                              <ListItemText
+                                primary={
+                                  <Link to={`/product/${item._id}`}>
+                                    {item.name}
+                                  </Link>
+                                }
+                                secondary={`${item.quantity} X $${
+                                  item.price
+                                } = $${(
+                                  item.quantity * item.price
+                                ).toFixed(2)}`}
+                              />
+                            </ListItem>
+                            {index < cartItems.length - 1 && (
+                              <Divider />
+                            )}
+                          </>
+                        ))}
+                      </List>
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item md={4}>
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography variant="h5">
+                      Order Summary
+                    </Typography>
+                    <List>
+                      <ListItem>
+                        <ListItemText primary="Items" />
+                        <Typography>${itemsPrice}</Typography>
+                      </ListItem>
+                      <ListItem>
+                        <ListItemText primary="Shipping" />
+                        <Typography>${shippingPrice}</Typography>
+                      </ListItem>
+                      <ListItem>
+                        <ListItemText primary="Tax" />
+                        <Typography>${taxPrice}</Typography>
+                      </ListItem>
+                      <ListItem>
+                        <ListItemText primary="Total" />
+                        <Typography>${totalPrice}</Typography>
+                      </ListItem>
+                      {orderError && (
+                        <ListItem>
+                          <Message severity="error">
+                            <>{orderError}</>
+                          </Message>
+                        </ListItem>
+                      )}
+                    </List>
+                  </CardContent>
+                  <CardActions>
                     <Button
-                      type="button"
-                      className="btn-block"
+                      variant="contained"
+                      color="primary"
+                      fullWidth
                       disabled={cartItems.length === 0}
                       onClick={handleOrder}
                     >
                       Place Order
                     </Button>
-                  </ListGroup.Item>
-                </ListGroup>
-              </Card>
-            </Col>
-          </Row>
-        </div>
+                  </CardActions>
+                </Card>
+              </Grid>
+            </Grid>
+          </Container>
+        </>
       )}
-    </>
+    </Container>
   );
 };
 export default PlaceOrderPage;

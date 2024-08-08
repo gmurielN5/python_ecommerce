@@ -1,8 +1,6 @@
 import { useState, useEffect, SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Form, Button, Row, Col, Table } from 'react-bootstrap';
-
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import {
@@ -14,6 +12,19 @@ import {
 import { updateUser } from '../store/user/userActions';
 import { getUserOrdersList } from '../store/order/orderActions';
 import { selectOrderList } from '../store/order/orderSlice';
+
+import {
+  Container,
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from '@mui/material';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -60,94 +71,92 @@ const ProfilePage: React.FC = () => {
   };
 
   return (
-    <>
-      <Row>
-        <Col md={3}>
-          <h2>User Profile</h2>
-
+    <Container>
+      <Grid container spacing={2}>
+        <Grid item md={3}>
+          <Typography variant="h4">User Profile</Typography>
           {message && (
-            <Message variant="danger">
+            <Message severity="error">
               <>{message}</>
             </Message>
           )}
           {error && (
-            <Message variant="danger">
+            <Message severity="error">
               <>{error}</>
             </Message>
           )}
           {loading && <Loader />}
-          <Form onSubmit={submitHandler}>
-            <Form.Group controlId="name">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                required
-                type="name"
-                placeholder="Enter name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId="email">
-              <Form.Label>Email Address</Form.Label>
-              <Form.Control
-                required
-                type="email"
-                placeholder="Enter Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Enter Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId="passwordConfirm">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Button type="submit" variant="primary">
+          <form onSubmit={submitHandler}>
+            <TextField
+              required
+              fullWidth
+              id="name"
+              label="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              margin="normal"
+            />
+            <TextField
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              margin="normal"
+            />
+            <TextField
+              fullWidth
+              id="password"
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              margin="normal"
+            />
+            <TextField
+              fullWidth
+              id="passwordConfirm"
+              label="Confirm Password"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              margin="normal"
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+            >
               Update
             </Button>
-          </Form>
-        </Col>
-
-        <Col md={9}>
-          {!ordersList.length ? null : (
+          </form>
+        </Grid>
+        <Grid item md={9}>
+          {ordersList.length > 0 && (
             <>
-              <h2>My Orders</h2>
-              <Table striped responsive className="table-sm">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Date</th>
-                    <th>Total</th>
-                    <th>Paid</th>
-                    <th>Delivered</th>
-                    <th></th>
-                  </tr>
-                </thead>
-
-                <tbody>
+              <Typography variant="h4">My Orders</Typography>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Total</TableCell>
+                    <TableCell>Paid</TableCell>
+                    <TableCell>Delivered</TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
                   {ordersList.map((order) => (
-                    <tr key={order._id}>
-                      <td>{order._id}</td>
-                      <td>{order.createdAt.substring(0, 10)}</td>
-                      <td>${order.totalPrice}</td>
-                      <td>
+                    <TableRow key={order._id}>
+                      <TableCell>{order._id}</TableCell>
+                      <TableCell>
+                        {order.createdAt.substring(0, 10)}
+                      </TableCell>
+                      <TableCell>${order.totalPrice}</TableCell>
+                      <TableCell>
                         {order.isPaid ? (
                           order.paidAt.substring(0, 10)
                         ) : (
@@ -156,21 +165,23 @@ const ProfilePage: React.FC = () => {
                             style={{ color: 'red' }}
                           ></i>
                         )}
-                      </td>
-                      <td>
+                      </TableCell>
+                      <TableCell>
                         <Link to={`/order/${order._id}`}>
-                          <Button className="btn-sm">Details</Button>
+                          <Button variant="contained" size="small">
+                            Details
+                          </Button>
                         </Link>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
+                </TableBody>
               </Table>
             </>
           )}
-        </Col>
-      </Row>
-    </>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

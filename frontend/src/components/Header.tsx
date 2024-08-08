@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { Link } from 'react-router-dom';
 
@@ -6,13 +7,27 @@ import { clearCart } from '../store/cart/cartSlice';
 import { clearOrderItem } from '../store/order/orderSlice';
 import { selectUser } from '../store/user/userSlice';
 
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
-
 import { Search } from './Search';
 
-// import SearchBox from './SearchBox';
+import {
+  Box,
+  Typography,
+  AppBar,
+  Toolbar,
+  Menu,
+  MenuItem,
+  Button,
+} from '@mui/material';
+import Logo from '../assets/logo.svg';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
+import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
 
 export const Header: React.FC = () => {
+  const [anchorElUser, setAnchorElUser] =
+    useState<null | HTMLElement>(null);
+  const [anchorElAdmin, setAnchorElAdmin] =
+    useState<null | HTMLElement>(null);
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
 
@@ -22,55 +37,112 @@ export const Header: React.FC = () => {
     dispatch(clearOrderItem());
   };
 
+  const handleUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleAdminMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElAdmin(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleCloseAdminMenu = () => {
+    setAnchorElAdmin(null);
+  };
+
   return (
-    <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
-        <Container>
-          <Navbar.Brand as={Link} to="/">
-            MeeShop
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Search />
-            <Nav className="ml-auto">
-              <Nav.Link as={Link} to="/cart">
-                <i className="fas fa-shopping-cart pe-2"></i>Cart
-              </Nav.Link>
-              {user ? (
-                <>
-                  <NavDropdown title={user.name} id="username">
-                    <NavDropdown.Item as={Link} to="/profile">
-                      Profile
-                    </NavDropdown.Item>
+    <AppBar>
+      <Toolbar>
+        <Logo />
+        <Typography
+          variant="h6"
+          component={Link}
+          to="/"
+          style={{
+            flexGrow: 1,
+            textDecoration: 'none',
+            color: 'inherit',
+          }}
+        >
+          ELEM
+        </Typography>
 
-                    <NavDropdown.Item onClick={logoutHandler}>
-                      Logout
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </>
-              ) : (
-                <Nav.Link as={Link} to="/login">
-                  <i className="fas fa-user pe-2"></i>Login
-                </Nav.Link>
-              )}
+        <Search />
+        <Box ml="auto">
+          <Button color="inherit" component={Link} to="/cart">
+            <ShoppingBagOutlinedIcon />
+            Cart
+          </Button>
+          {user ? (
+            <>
+              <Button color="inherit" onClick={handleUserMenu}>
+                {user.name}
+                <ArrowDropDownOutlinedIcon />
+              </Button>
+              <Menu
+                anchorEl={anchorElUser}
+                keepMounted
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem
+                  component={Link}
+                  to="/profile"
+                  onClick={handleCloseUserMenu}
+                >
+                  Profile
+                </MenuItem>
+                <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+              </Menu>
+            </>
+          ) : (
+            <Button color="inherit" component={Link} to="/login">
+              <LoginOutlinedIcon />
+              Login
+            </Button>
+          )}
 
-              {user && user.isAdmin && (
-                <NavDropdown title="Admin" id="adminmenu">
-                  <NavDropdown.Item as={Link} to="/admin/userlist">
-                    Users
-                  </NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/admin/productlist">
-                    Products
-                  </NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/admin/orderlist">
-                    Orders
-                  </NavDropdown.Item>
-                </NavDropdown>
-              )}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </header>
+          {user && user.isAdmin && (
+            <>
+              <Button color="inherit" onClick={handleAdminMenu}>
+                Admin
+                <ArrowDropDownOutlinedIcon />
+              </Button>
+              <Menu
+                anchorEl={anchorElAdmin}
+                keepMounted
+                open={Boolean(anchorElAdmin)}
+                onClose={handleCloseAdminMenu}
+              >
+                <MenuItem
+                  component={Link}
+                  to="/admin/userlist"
+                  onClick={handleCloseAdminMenu}
+                >
+                  Users
+                </MenuItem>
+                <MenuItem
+                  component={Link}
+                  to="/admin/productlist"
+                  onClick={handleCloseAdminMenu}
+                >
+                  Products
+                </MenuItem>
+                <MenuItem
+                  component={Link}
+                  to="/admin/orderlist"
+                  onClick={handleCloseAdminMenu}
+                >
+                  Orders
+                </MenuItem>
+              </Menu>
+            </>
+          )}
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 };

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Pagination } from 'react-bootstrap';
+import { Box, Pagination, PaginationItem } from '@mui/material';
 
 export const Paginate: React.FC<{
   pages: number;
@@ -11,21 +11,28 @@ export const Paginate: React.FC<{
     keyword = keyword.split('?keyword=')[1].split('&')[0];
   }
   return (
-    <Pagination>
-      {[...Array(pages).keys()].map((x) => (
-        <Pagination.Item
-          key={x + 1}
-          as={Link}
-          to={
-            !isAdmin
-              ? `/?keyword=${keyword}&page=${x + 1}`
-              : `/admin/productlist/?keyword=${keyword}&page=${x + 1}`
-          }
-          active={x + 1 === page}
-        >
-          {x + 1}
-        </Pagination.Item>
-      ))}
-    </Pagination>
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Pagination
+        page={page}
+        count={pages}
+        color="primary"
+        renderItem={(item) => (
+          <PaginationItem
+            component={Link}
+            to={
+              !isAdmin
+                ? `/?keyword=${keyword}&page=${item.page}`
+                : `/admin/productlist/?keyword=${keyword}&page=${item.page}`
+            }
+            {...item}
+          />
+        )}
+      />
+    </Box>
   );
 };

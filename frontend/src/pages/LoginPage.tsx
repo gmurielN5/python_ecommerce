@@ -9,14 +9,15 @@ import {
 
 import { login } from '../store/user/userActions';
 
-import {
-  Link,
-  useLocation,
-  Navigate,
-  redirect,
-} from 'react-router-dom';
+import { Link, useLocation, Navigate } from 'react-router-dom';
 
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+} from '@mui/material';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -32,7 +33,7 @@ const LoginPage: React.FC = () => {
 
   const location = useLocation();
 
-  const origin = location.state?.from?.pathname || '/';
+  const redirect = location.state?.from?.pathname || '/';
 
   const handleLogin = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,43 +41,57 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <>
-      {user && <Navigate to={origin} replace={true} />}
-      <h1>Sign In</h1>
+    <Container component="main" maxWidth="sm">
+      {user && <Navigate to={redirect} replace={true} />}
+      <Typography component="h1" variant="h5">
+        Sign in
+      </Typography>
       {error && (
-        <Message variant="danger">
+        <Message severity="error">
           <p>{error}</p>
         </Message>
       )}
       {loading && <Loader />}
-      <Form onSubmit={(e) => handleLogin(e)}>
-        <Form.Group controlId="email">
-          <Form.Label>Email Address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Button type="submit" variant="primary">
-          Sign In
+      <form onSubmit={(e) => handleLogin(e)}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Grid>
+        </Grid>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          Register
         </Button>
-      </Form>
-
-      <Row className="py-3">
-        <Col>
+      </form>
+      <Grid container justifyContent="flex-end">
+        <Grid item>
           New Customer?
           <Link
             to={
@@ -87,9 +102,9 @@ const LoginPage: React.FC = () => {
           >
             Register
           </Link>
-        </Col>
-      </Row>
-    </>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 export default LoginPage;

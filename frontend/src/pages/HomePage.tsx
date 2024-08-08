@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { Row, Col } from 'react-bootstrap';
 
 import {
   selectProducts,
@@ -13,6 +12,8 @@ import {
 } from '../store/products/productsSlice';
 
 import { listProducts } from '../store/products/productActions';
+
+import { Container, Grid } from '@mui/material';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -39,41 +40,49 @@ const HomePage: React.FC = () => {
   return (
     <div>
       {!keyword && <ProductCarousel />}
-      <h1>Latest Products</h1>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          {error ? (
-            <Message variant="danger">
-              <>{error}</>
-            </Message>
-          ) : (
-            <>
-              {!products.length ? (
-                <Message variant="info">
-                  <p>Product not found</p>
-                </Message>
-              ) : (
-                <Row>
-                  {products.map((product) => (
-                    <Col
-                      key={product._id}
-                      sm={12}
-                      md={6}
-                      lg={4}
-                      xl={3}
-                    >
-                      <Product product={product} />
-                    </Col>
-                  ))}
-                </Row>
-              )}
-            </>
-          )}
-        </>
-      )}
-      <Paginate page={page} pages={pages} keyword={keyword} />
+      <Container>
+        <h1>Latest Products</h1>
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            {error ? (
+              <Message severity="error">
+                <>{error}</>
+              </Message>
+            ) : (
+              <>
+                {!products.length ? (
+                  <Message severity="info">
+                    <p>Product not found</p>
+                  </Message>
+                ) : (
+                  <Grid
+                    container
+                    spacing={4}
+                    justifyContent="center"
+                    mt={4}
+                  >
+                    {products.map((product) => (
+                      <Grid
+                        item
+                        key={product._id}
+                        sm={12}
+                        md={6}
+                        lg={4}
+                        xl={3}
+                      >
+                        <Product product={product} />
+                      </Grid>
+                    ))}
+                  </Grid>
+                )}
+              </>
+            )}
+          </>
+        )}
+        <Paginate page={page} pages={pages} keyword={keyword} />
+      </Container>
     </div>
   );
 };

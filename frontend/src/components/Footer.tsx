@@ -1,13 +1,20 @@
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Grid, Typography } from '@mui/material';
 
 export const Footer: React.FC = () => (
   <footer>
     <Container>
-      <Row>
-        <Col className="text-center py-3">
-          Copyright &copy; MeeShop
-        </Col>
-      </Row>
+      <Grid container justifyContent="center" alignItems="center">
+        <Grid item>
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            align="center"
+            style={{ padding: '1rem 0' }}
+          >
+            Copyright &copy; Elem
+          </Typography>
+        </Grid>
+      </Grid>
     </Container>
   </footer>
 );

@@ -1,5 +1,5 @@
-import { Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Stepper, Step, StepButton } from '@mui/material';
 
 type StepsProps = {
   step1?: boolean;
@@ -15,46 +15,31 @@ export const CheckoutSteps: React.FC<StepsProps> = ({
   step4,
 }) => {
   return (
-    <Nav className="justify-content-center mb-4">
-      <Nav.Item>
-        {step1 ? (
-          <Nav.Link as={Link} to="/login">
-            Login
-          </Nav.Link>
-        ) : (
-          <Nav.Link disabled>Login</Nav.Link>
-        )}
-      </Nav.Item>
-
-      <Nav.Item>
-        {step2 ? (
-          <Nav.Link as={Link} to="/shipping">
-            Shipping
-          </Nav.Link>
-        ) : (
-          <Nav.Link disabled>Shipping</Nav.Link>
-        )}
-      </Nav.Item>
-
-      <Nav.Item>
-        {step3 ? (
-          <Nav.Link as={Link} to="/payment">
-            Payment
-          </Nav.Link>
-        ) : (
-          <Nav.Link disabled>Payment</Nav.Link>
-        )}
-      </Nav.Item>
-
-      <Nav.Item>
-        {step4 ? (
-          <Nav.Link as={Link} to="/placeorder">
-            Place Order
-          </Nav.Link>
-        ) : (
-          <Nav.Link disabled>Place Order</Nav.Link>
-        )}
-      </Nav.Item>
-    </Nav>
+    <Stepper alternativeLabel>
+      <Step active={!!step1}>
+        <StepButton component={Link} to="/login" disabled={!step1}>
+          Login
+        </StepButton>
+      </Step>
+      <Step active={!!step2}>
+        <StepButton component={Link} to="/shipping" disabled={!step2}>
+          Shipping
+        </StepButton>
+      </Step>
+      <Step active={!!step3}>
+        <StepButton component={Link} to="/payment" disabled={!step3}>
+          Payment
+        </StepButton>
+      </Step>
+      <Step active={!!step4}>
+        <StepButton
+          component={Link}
+          to="/placeorder"
+          disabled={!step4}
+        >
+          Place Order
+        </StepButton>
+      </Step>
+    </Stepper>
   );
 };

@@ -1,35 +1,47 @@
 import { Link } from 'react-router-dom';
-import { Card } from 'react-bootstrap';
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Box,
+} from '@mui/material';
 
 import { ProductType } from '../store/products/productsSlice';
 
-import { Rating } from './Rating';
+import { BasicRating } from './Rating';
 
 export const Product: React.FC<{ product: ProductType }> = ({
   product,
 }) => {
   return (
-    <Card className="my-3 p-3 rounded">
+    <Card sx={{ maxWidth: 345 }}>
       <Link to={`/product/${product._id}`}>
-        <Card.Img src={product.image} />
+        <CardMedia
+          component="img"
+          height="275"
+          image={product.image}
+          alt={product.name}
+        />
       </Link>
-      <Card.Body>
+      <CardContent>
         <Link to={`/product/${product._id}`}>
-          <Card.Title as="div">
-            <strong>{product.name}</strong>
-          </Card.Title>
+          <Typography gutterBottom variant="h5" component="div">
+            {product.name}
+          </Typography>
         </Link>
-        <Card.Text as="div">
-          <div className="my-3">
-            <Rating
-              value={product.rating}
-              text={`${product.numReviews} reviews`}
-              color={'#f8e825'}
-            />
-          </div>
-        </Card.Text>
-        <Card.Text as="h3">£{product.price}</Card.Text>
-      </Card.Body>
+        <Box mt={2}>
+          <BasicRating
+            value={product.rating}
+            text={`${product.numReviews} reviews`}
+          />
+        </Box>
+        <Box mt={2}>
+          <Typography variant="h6" component="div">
+            £{product.price}
+          </Typography>
+        </Box>
+      </CardContent>
     </Card>
   );
 };

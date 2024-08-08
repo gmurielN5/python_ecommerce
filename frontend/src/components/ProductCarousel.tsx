@@ -10,10 +10,11 @@ import {
   selectError,
 } from '../store/products/productsSlice';
 
-import { Carousel, Image } from 'react-bootstrap';
-
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
+
+import Carousel from 'react-material-ui-carousel';
+import { Paper, Button } from '@mui/material';
 
 export const ProductCarousel: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -32,28 +33,30 @@ export const ProductCarousel: React.FC = () => {
       ) : (
         <>
           {error ? (
-            <Message variant="danger">
+            <Message severity="error">
               <>{error}</>
             </Message>
           ) : (
             <>
               {!topRatedProducts.length ? null : (
-                <Carousel pause="hover" className="bg-dark">
-                  {topRatedProducts.map((product) => (
-                    <Carousel.Item key={product._id}>
+                <Carousel navButtonsAlwaysVisible={true}>
+                  {topRatedProducts.map((product, i) => (
+                    <Paper key={i}>
                       <Link to={`/product/${product._id}`}>
-                        <Image
-                          src={product.image}
+                        <img
+                          width={640}
+                          height={360}
+                          src={`${product.image}`}
                           alt={product.name}
-                          fluid
+                          loading="lazy"
                         />
-                        <Carousel.Caption className="carousel.caption">
-                          <h4>
-                            {product.name} (${product.price})
-                          </h4>
-                        </Carousel.Caption>
+                        <h2>{product.name}</h2>
+                        <p>£{product.price}</p>
+                        <Button className="CheckButton">
+                          Check it out!
+                        </Button>
                       </Link>
-                    </Carousel.Item>
+                    </Paper>
                   ))}
                 </Carousel>
               )}

@@ -3,8 +3,6 @@ import { Link, useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
-import { Form, Button } from 'react-bootstrap';
-
 import {
   selectLoading,
   selectError,
@@ -17,6 +15,16 @@ import {
   updateProduct,
   uploadImage,
 } from '../store/products/productActions';
+
+import {
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+  Box,
+  Input,
+} from '@mui/material';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -84,8 +92,6 @@ const ProductEditPage: React.FC = () => {
       return;
     }
     const formData = new FormData();
-    console.log(formData);
-
     formData.append('image', imageFile);
     formData.append('product_id', id as string);
     dispatch(uploadImage(formData));
@@ -96,103 +102,148 @@ const ProductEditPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <Container>
       <Link to="/admin/productlist" onClick={handleBackClick}>
         Go Back
       </Link>
+      <Container component="main" maxWidth="sm">
+        <Typography component="h1" variant="h5">
+          Edit Product
+        </Typography>
 
-      <h1>Edit Product</h1>
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">
-          <>{error}</>
-        </Message>
-      ) : (
-        <Form onSubmit={submitHandler}>
-          <Form.Group controlId="name">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="name"
-              placeholder="Enter name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="price">
-            <Form.Label>Price</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter price"
-              value={price}
-              onChange={(e) => setPrice(Number(e.target.value))}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Upload Image</Form.Label>
-            <Form.Control
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-            />
-          </Form.Group>
-          {image && (
-            <img
-              src={image}
-              alt="Preview"
-              className="img-thumbnail mb-3"
-            />
-          )}
-          <Form.Group controlId="brand">
-            <Form.Label>Brand</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter brand"
-              value={brand}
-              onChange={(e) => setBrand(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="countinstock">
-            <Form.Label>Stock</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter stock"
-              value={countInStock}
-              onChange={(e) =>
-                setCountInStock(Number(e.target.value))
-              }
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="category">
-            <Form.Label>Category</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="description">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Button type="submit" variant="primary">
-            Update
-          </Button>
-        </Form>
-      )}
-    </div>
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <Message severity="error">
+            <>{error}</>
+          </Message>
+        ) : (
+          <form onSubmit={submitHandler}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  id="name"
+                  label="Name"
+                  name="name"
+                  placeholder="Enter name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  margin="normal"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  id="price"
+                  label="Price"
+                  name="price"
+                  type="number"
+                  placeholder="Enter price"
+                  value={price}
+                  onChange={(e) => setPrice(Number(e.target.value))}
+                  margin="normal"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ mt: 2, mb: 2 }}>
+                  <Typography
+                    variant="body1"
+                    component="label"
+                    htmlFor="formFile"
+                  >
+                    Upload Image
+                  </Typography>
+                  <Input
+                    id="formFile"
+                    type="file"
+                    inputProps={{ accept: 'image/*' }}
+                    onChange={handleFileChange}
+                    fullWidth
+                  />
+                </Box>
+                {image && (
+                  <Box sx={{ mt: 2, mb: 2 }}>
+                    <img
+                      src={image}
+                      alt="Preview"
+                      style={{ maxWidth: '100%', height: 'auto' }}
+                    />
+                  </Box>
+                )}
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  id="brand"
+                  label="Brand"
+                  name="brand"
+                  placeholder="Enter brand"
+                  value={brand}
+                  onChange={(e) => setBrand(e.target.value)}
+                  margin="normal"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  id="countinstock"
+                  label="Stock"
+                  name="countinstock"
+                  type="number"
+                  placeholder="Enter stock"
+                  value={countInStock}
+                  onChange={(e) =>
+                    setCountInStock(Number(e.target.value))
+                  }
+                  margin="normal"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  id="category"
+                  label="Category"
+                  name="category"
+                  placeholder="Enter category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  margin="normal"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  id="description"
+                  label="Description"
+                  name="description"
+                  placeholder="Enter description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  margin="normal"
+                  multiline
+                  rows={4}
+                />
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2 }}
+            >
+              Continue
+            </Button>
+          </form>
+        )}
+      </Container>
+    </Container>
   );
 };
 

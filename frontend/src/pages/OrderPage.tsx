@@ -20,13 +20,20 @@ import {
 import { selectUser } from '../store/user/userSlice';
 
 import {
-  Row,
-  Col,
-  ListGroup,
-  Image,
+  Container,
+  Grid,
+  Typography,
   Card,
+  CardContent,
+  CardActions,
   Button,
-} from 'react-bootstrap';
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+  Divider,
+} from '@mui/material';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -79,178 +86,184 @@ const OrderPage: React.FC = () => {
   };
 
   return (
-    <>
+    <Container>
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">
+        <Message severity="error">
           <>{error}</>
         </Message>
       ) : (
         <>
           {!order ? (
-            <Message variant="danger">
+            <Message severity="error">
               <p>Order not found</p>
             </Message>
           ) : (
-            <div>
-              <h1>Order: {order._id}</h1>
-              <Row>
-                <Col md={8}>
-                  <ListGroup variant="flush">
-                    <ListGroup.Item>
-                      <h2>Shipping</h2>
-                      <p>
+            <Container>
+              <Typography variant="h4" gutterBottom>
+                Order: {order._id}
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item md={8}>
+                  <Card variant="outlined">
+                    <CardContent>
+                      <Typography variant="h5">Shipping</Typography>
+                      <Typography>
                         <strong>Name: </strong> {order.user.name}
-                      </p>
-                      <p>
-                        <strong>Email: </strong>
-                        {order.user.email}
-                      </p>
-                      <p>
+                      </Typography>
+                      <Typography>
+                        <strong>Email: </strong> {order.user.email}
+                      </Typography>
+                      <Typography>
                         <strong>Shipping: </strong>
-                        {order.shippingAddress.address},
-                        {order.shippingAddress.city}
-                        {order.shippingAddress.postalCode},
-                        {order.shippingAddress.country}
-                      </p>
+                        {`${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.postalCode}, ${order.shippingAddress.country}`}
+                      </Typography>
 
                       {order.isDelivered ? (
-                        <Message variant="success">
+                        <Message severity="success">
                           <p>Delivered on {order.deliveredAt}</p>
                         </Message>
                       ) : (
-                        <Message variant="warning">
+                        <Message severity="warning">
                           <p>Not Delivered</p>
                         </Message>
                       )}
-                    </ListGroup.Item>
-
-                    <ListGroup.Item>
-                      <h2>Payment Method</h2>
-                      <p>
-                        <strong>Method: </strong>
+                    </CardContent>
+                  </Card>
+                  <Card
+                    variant="outlined"
+                    style={{ marginTop: '16px' }}
+                  >
+                    <CardContent>
+                      <Typography variant="h5">
+                        Payment Method
+                      </Typography>
+                      <Typography>
+                        <strong>Method: </strong>{' '}
                         {order.paymentMethod}
-                      </p>
+                      </Typography>
                       {order.isPaid ? (
-                        <Message variant="success">
+                        <Message severity="success">
                           <p>Paid on {order.paidAt}</p>
                         </Message>
                       ) : (
-                        <Message variant="warning">
+                        <Message severity="warning">
                           <p>Not Paid</p>
                         </Message>
                       )}
-                    </ListGroup.Item>
-
-                    <ListGroup.Item>
-                      <h2>Order Items</h2>
+                    </CardContent>
+                  </Card>
+                  <Card
+                    variant="outlined"
+                    style={{ marginTop: '16px' }}
+                  >
+                    <CardContent>
+                      <Typography variant="h5">
+                        Order Items
+                      </Typography>
                       {order.orderItems.length === 0 ? (
-                        <Message variant="info">
+                        <Message severity="info">
                           <p>Order is empty</p>
                         </Message>
                       ) : (
-                        <ListGroup variant="flush">
+                        <List>
                           {order.orderItems.map((item, index) => (
-                            <ListGroup.Item key={index}>
-                              <Row>
-                                <Col md={1}>
-                                  <Image
+                            <>
+                              <ListItem
+                                alignItems="flex-start"
+                                key={index}
+                              >
+                                <ListItemAvatar>
+                                  <Avatar
+                                    variant="rounded"
                                     src={item.image}
                                     alt={item.name}
-                                    fluid
-                                    rounded
+                                    sx={{ width: 56, height: 56 }}
                                   />
-                                </Col>
-
-                                <Col>
-                                  <Link to={`/product/${item._id}`}>
-                                    {item.name}
-                                  </Link>
-                                </Col>
-
-                                <Col md={4}>
-                                  {item.quantity} X ${item.price} = $
-                                  {(
+                                </ListItemAvatar>
+                                <ListItemText
+                                  primary={
+                                    <Link to={`/product/${item._id}`}>
+                                      {item.name}
+                                    </Link>
+                                  }
+                                  secondary={`${item.quantity} X $${
+                                    item.price
+                                  } = $${(
                                     item.quantity * item.price
-                                  ).toFixed(2)}
-                                </Col>
-                              </Row>
-                            </ListGroup.Item>
+                                  ).toFixed(2)}`}
+                                />
+                              </ListItem>
+                              {index <
+                                order.orderItems.length - 1 && (
+                                <Divider />
+                              )}
+                            </>
                           ))}
-                        </ListGroup>
+                        </List>
                       )}
-                    </ListGroup.Item>
-                  </ListGroup>
-                </Col>
-
-                <Col md={4}>
-                  <Card>
-                    <ListGroup variant="flush">
-                      <ListGroup.Item>
-                        <h2>Order Summary</h2>
-                      </ListGroup.Item>
-
-                      <ListGroup.Item>
-                        <Row>
-                          <Col>Items:</Col>
-                          <Col>${itemsPrice}</Col>
-                        </Row>
-                      </ListGroup.Item>
-
-                      <ListGroup.Item>
-                        <Row>
-                          <Col>Shipping:</Col>
-                          <Col>${order.shippingPrice}</Col>
-                        </Row>
-                      </ListGroup.Item>
-
-                      <ListGroup.Item>
-                        <Row>
-                          <Col>Tax:</Col>
-                          <Col>${order.taxPrice}</Col>
-                        </Row>
-                      </ListGroup.Item>
-
-                      <ListGroup.Item>
-                        <Row>
-                          <Col>Total:</Col>
-                          <Col>${order.totalPrice}</Col>
-                        </Row>
-                      </ListGroup.Item>
-
-                      {/* {!order.isPaid && (
-                        <ListGroup.Item>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item md={4}>
+                  <Card variant="outlined">
+                    <CardContent>
+                      <Typography variant="h5">
+                        Order Summary
+                      </Typography>
+                      <List>
+                        <ListItem>
+                          <ListItemText primary="Items" />
+                          <Typography>${itemsPrice}</Typography>
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="Shipping" />
+                          <Typography>
+                            ${order.shippingPrice}
+                          </Typography>
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="Tax" />
+                          <Typography>${order.taxPrice}</Typography>
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="Total" />
+                          <Typography>${order.totalPrice}</Typography>
+                        </ListItem>
+                        {/* {!order.isPaid && (
+                         <ListItem>
                           <PayPalButton
                             amount={order?.totalPrice}
                             onSuccess={successPaymentHandler}
                           />
-                        </ListGroup.Item>
+                            </ListItem>
                       )} */}
-                    </ListGroup>
-
+                      </List>
+                    </CardContent>
                     {userInfo &&
                       userInfo.isAdmin &&
                       order.isPaid &&
                       !order.isDelivered && (
-                        <ListGroup.Item>
+                        <CardActions>
                           <Button
-                            type="button"
-                            className="btn btn-block"
+                            variant="contained"
+                            color="primary"
+                            fullWidth
                             onClick={deliverHandler}
                           >
                             Mark As Delivered
                           </Button>
-                        </ListGroup.Item>
+                        </CardActions>
                       )}
                   </Card>
-                </Col>
-              </Row>
-            </div>
+                </Grid>
+              </Grid>
+            </Container>
           )}
         </>
       )}
-    </>
+    </Container>
   );
 };
 export default OrderPage;

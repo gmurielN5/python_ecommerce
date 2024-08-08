@@ -62,7 +62,7 @@ const UserEditPage: React.FC = () => {
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">
+        <Message severity="error">
           <>{error}</>
         </Message>
       ) : (

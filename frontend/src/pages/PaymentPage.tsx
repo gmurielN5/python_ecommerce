@@ -8,7 +8,17 @@ import {
   addPaymentMethod,
 } from '../store/cart/cartSlice';
 
-import { Form, Button, Col } from 'react-bootstrap';
+import {
+  Button,
+  Container,
+  Grid,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Typography,
+} from '@mui/material';
 
 import { CheckoutSteps } from '../components/CheckoutSteps';
 
@@ -28,27 +38,45 @@ const PaymentPage: React.FC = () => {
   return (
     <>
       {!shippingAddress && <Navigate to="/login" replace={true} />}
-      <CheckoutSteps step1 step2 step3 />
-
-      <Form onSubmit={submitHandler}>
-        <Form.Group>
-          <Form.Label as="legend">Select Method</Form.Label>
-          <Col>
-            <Form.Check
-              type="radio"
-              label="PayPal or Credit Card"
-              id="paypal"
-              name="paymentMethod"
-              checked
-              onChange={(e) => setPaymentMethod(e.target.value)}
-            ></Form.Check>
-          </Col>
-        </Form.Group>
-
-        <Button type="submit" variant="primary">
-          Continue
-        </Button>
-      </Form>
+      <Container>
+        <CheckoutSteps step1 step2 step3 />
+        <Container component="main" maxWidth="sm">
+          <Typography component="h1" variant="h5">
+            Payment Method
+          </Typography>
+          <form onSubmit={submitHandler}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">
+                    Select Method
+                  </FormLabel>
+                  <RadioGroup
+                    aria-label="payment method"
+                    name="paymentMethod"
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  >
+                    <FormControlLabel
+                      value="PayPal"
+                      control={<Radio />}
+                      label="PayPal or Credit Card"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{ mt: 2 }}
+              >
+                Continue
+              </Button>
+            </Grid>
+          </form>
+        </Container>
+      </Container>
     </>
   );
 };

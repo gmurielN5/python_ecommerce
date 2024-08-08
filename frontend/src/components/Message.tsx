@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
-import { Alert } from 'react-bootstrap';
+import Alert from '@mui/material/Alert';
 
 export const Message: React.FC<{
-  variant: string;
+  severity: 'error' | 'warning' | 'info' | 'success';
   children: ReactElement;
-}> = ({ variant, children }) => {
-  return <Alert variant={variant}>{children}</Alert>;
+}> = ({ severity, children }) => {
+  return <Alert severity={severity}>{children}</Alert>;
 };

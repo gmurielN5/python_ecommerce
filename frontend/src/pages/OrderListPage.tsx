@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Table, Button } from 'react-bootstrap';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
@@ -10,6 +9,22 @@ import {
   selectOrderError,
 } from '../store/order/orderSlice';
 import { getOrdersList } from '../store/order/orderActions';
+
+import {
+  Container,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+  Typography,
+  IconButton,
+} from '@mui/material';
+
+import CheckIcon from '@mui/icons-material/Check';
+import InfoIcon from '@mui/icons-material/Info';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -26,71 +41,69 @@ const OrdersListPage: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div>
-      <h1>Orders</h1>
+    <Container>
+      <Typography component="h1" variant="h5">
+        Orders
+      </Typography>
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">
+        <Message severity="error">
           <>{error}</>
         </Message>
       ) : (
-        <Table striped bordered hover responsive className="table-sm">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>USER</th>
-              <th>DATE</th>
-              <th>Total</th>
-              <th>PAID</th>
-              <th>DELIVERED</th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {ordersList.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id}</td>
-                <td>{order.user && order.user.name}</td>
-                <td>{order.createdAt.substring(0, 10)}</td>
-                <td>${order.totalPrice}</td>
-
-                <td>
-                  {order.isPaid ? (
-                    order.paidAt.substring(0, 10)
-                  ) : (
-                    <i
-                      className="fas fa-check"
-                      style={{ color: 'red' }}
-                    ></i>
-                  )}
-                </td>
-
-                <td>
-                  {order.isDelivered ? (
-                    order.deliveredAt.substring(0, 10)
-                  ) : (
-                    <i
-                      className="fas fa-check"
-                      style={{ color: 'red' }}
-                    ></i>
-                  )}
-                </td>
-
-                <td>
-                  <Link to={`/order/${order._id}`}>
-                    <Button variant="light" className="btn-sm">
-                      Details
-                    </Button>
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>USER</TableCell>
+                <TableCell>DATE</TableCell>
+                <TableCell>Total</TableCell>
+                <TableCell>PAID</TableCell>
+                <TableCell>DELIVERED</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {ordersList.map((order) => (
+                <TableRow key={order._id}>
+                  <TableCell>{order._id}</TableCell>
+                  <TableCell>
+                    {order.user && order.user.name}
+                  </TableCell>
+                  <TableCell>
+                    {order.createdAt.substring(0, 10)}
+                  </TableCell>
+                  <TableCell>${order.totalPrice}</TableCell>
+                  <TableCell>
+                    {order.isPaid ? (
+                      order.paidAt.substring(0, 10)
+                    ) : (
+                      <CheckIcon style={{ color: 'red' }} />
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {order.isDelivered ? (
+                      order.deliveredAt.substring(0, 10)
+                    ) : (
+                      <CheckIcon style={{ color: 'red' }} />
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Link to={`/order/${order._id}`}>
+                      <IconButton color="primary" size="small">
+                        <InfoIcon />
+                      </IconButton>
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
-    </div>
+    </Container>
   );
 };
 
