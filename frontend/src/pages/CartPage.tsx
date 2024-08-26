@@ -1,4 +1,4 @@
-import { useEffect, ChangeEvent } from 'react';
+import { useEffect } from 'react';
 
 import {
   useLocation,
@@ -29,6 +29,7 @@ import {
   Card,
   CardContent,
   CardActions,
+  SelectChangeEvent,
 } from '@mui/material';
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -64,7 +65,7 @@ const CartPage: React.FC = () => {
   };
 
   const handleChange = (
-    event: ChangeEvent<HTMLSelectElement>,
+    event: SelectChangeEvent<number>,
     id: number
   ) => {
     const value = Number(event.target.value);
@@ -140,7 +141,6 @@ const CartPage: React.FC = () => {
             </List>
           )}
         </Grid>
-
         <Grid item md={4}>
           <Card>
             <CardContent>

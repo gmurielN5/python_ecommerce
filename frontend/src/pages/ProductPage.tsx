@@ -1,9 +1,4 @@
-import {
-  useState,
-  useEffect,
-  ChangeEvent,
-  SyntheticEvent,
-} from 'react';
+import { useState, useEffect, SyntheticEvent } from 'react';
 
 import { Link, useParams, useNavigate } from 'react-router-dom';
 
@@ -23,6 +18,7 @@ import {
 } from '../store/products/productActions';
 
 import {
+  SelectChangeEvent,
   Container,
   Grid,
   Typography,
@@ -75,8 +71,8 @@ const ProductPage: React.FC = () => {
     navigate(`/cart/${id}?qty=${qty}`);
   };
 
-  const handleSelect = (e: ChangeEvent<HTMLSelectElement>): void => {
-    setQty(parseInt(e.target.value));
+  const handleSelect = (e: SelectChangeEvent<number>): void => {
+    setQty(Number(e.target.value));
   };
 
   const submitHandler = (e: SyntheticEvent<HTMLFormElement>) => {
