@@ -40,7 +40,7 @@ const PaymentPage: React.FC = () => {
       {!shippingAddress && <Navigate to="/login" replace={true} />}
       <Container>
         <CheckoutSteps step1 step2 step3 />
-        <Container component="main" maxWidth="sm">
+        <Container component="main" maxWidth="md">
           <Typography component="h1" variant="h5">
             Payment Method
           </Typography>

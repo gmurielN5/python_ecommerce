@@ -41,7 +41,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <Container component="main" maxWidth="sm">
+    <Container component="main" maxWidth="md">
       {user && <Navigate to={redirect} replace={true} />}
       <Typography component="h1" variant="h5">
         Sign in
@@ -82,7 +82,6 @@ const LoginPage: React.FC = () => {
         </Grid>
         <Button
           type="submit"
-          fullWidth
           variant="contained"
           color="primary"
           sx={{ mt: 3, mb: 2 }}

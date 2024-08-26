@@ -12,7 +12,16 @@ import {
   selectUsersError,
 } from '../store/users/usersSlice';
 
-import { Form, Button } from 'react-bootstrap';
+import {
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+  FormControl,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -56,52 +65,74 @@ const UserEditPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <Container>
       <Link to="/admin/userlist">Go Back</Link>
-      <h1>Edit User</h1>
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message severity="error">
-          <>{error}</>
-        </Message>
-      ) : (
-        <Form onSubmit={submitHandler}>
-          <Form.Group controlId="name">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="name"
-              placeholder="Enter name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="email">
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter Email"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="isadmin">
-            <Form.Check
-              type="checkbox"
-              label="Is Admin"
-              checked={isAdmin}
-              onChange={(e) => setIsAdmin(e.target.checked)}
-            ></Form.Check>
-          </Form.Group>
-
-          <Button type="submit" variant="primary">
-            Update
-          </Button>
-        </Form>
-      )}
-    </div>
+      <Container component="main" maxWidth="md">
+        <Typography component="h1" variant="h5">
+          Edit User
+        </Typography>
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <Message severity="error">
+            <>{error}</>
+          </Message>
+        ) : (
+          <form onSubmit={submitHandler}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  id="name"
+                  label="Name"
+                  name="name"
+                  placeholder="Enter name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  margin="normal"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  id="username"
+                  label="Email Address"
+                  name="username"
+                  placeholder="Enter Email"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  margin="normal"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl component="fieldset">
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={isAdmin}
+                        onChange={(e) => setIsAdmin(e.target.checked)}
+                        color="primary"
+                      />
+                    }
+                    label="Is Admin"
+                  />
+                </FormControl>
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2 }}
+            >
+              Submit
+            </Button>
+          </form>
+        )}
+      </Container>
+    </Container>
   );
 };
 

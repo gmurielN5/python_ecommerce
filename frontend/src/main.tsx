@@ -8,8 +8,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import theme from './theme/theme.ts';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 import App from './App.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

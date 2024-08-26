@@ -106,7 +106,7 @@ const ProductEditPage: React.FC = () => {
       <Link to="/admin/productlist" onClick={handleBackClick}>
         Go Back
       </Link>
-      <Container component="main" maxWidth="sm">
+      <Container component="main" maxWidth="md">
         <Typography component="h1" variant="h5">
           Edit Product
         </Typography>
@@ -238,7 +238,7 @@ const ProductEditPage: React.FC = () => {
               color="primary"
               sx={{ mt: 2 }}
             >
-              Continue
+              Submit
             </Button>
           </form>
         )}

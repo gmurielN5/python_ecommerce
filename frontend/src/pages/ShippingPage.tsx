@@ -47,7 +47,7 @@ const ShippingPage: React.FC = () => {
   return (
     <Container>
       <CheckoutSteps step1 step2 />
-      <Container component="main" maxWidth="sm">
+      <Container component="main" maxWidth="md">
         <Typography component="h1" variant="h5">
           Shipping
         </Typography>

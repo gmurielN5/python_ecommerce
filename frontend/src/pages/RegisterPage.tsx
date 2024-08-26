@@ -49,7 +49,7 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <Container component="main" maxWidth="sm">
+    <Container component="main" maxWidth="md">
       {user && <Navigate to="/" replace={true} />}
       <Typography component="h1" variant="h5">
         Register
@@ -121,7 +121,6 @@ const RegisterPage: React.FC = () => {
         </Grid>
         <Button
           type="submit"
-          fullWidth
           variant="contained"
           color="primary"
           sx={{ mt: 3, mb: 2 }}
