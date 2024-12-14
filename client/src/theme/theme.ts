@@ -1,73 +1,74 @@
 import { createTheme } from '@mui/material/styles';
 
+// Base Colors
+const lightGreen = '#6A9A77'; // Primary
+const softBeige = '#EDE7D9'; // Secondary
+const mutedPeach = '#F4A896'; // Accent
+const creamWhite = '#F9F5F1'; // Light background
+const darkBrown = '#3A2F2A'; // Text in light mode
+const deepForest = '#2C3E3B'; // Dark mode background
+const mutedIvory = '#D7CEC6'; // Text in dark mode
+const info = '';
+
 const theme = createTheme({
   palette: {
+    mode: 'light',
     primary: {
-      main: '#1976d2', // A bold blue
-      light: '#63a4ff', // A lighter shade of the primary color
-      dark: '#004ba0', // A darker shade of the primary color
-      contrastText: '#ffffff', // Text color to be used on primary color background
+      main: lightGreen,
     },
     secondary: {
-      main: '#f50057', // A vibrant pink
-      light: '#ff5983', // A lighter shade of the secondary color
-      dark: '#bb002f', // A darker shade of the secondary color
-      contrastText: '#ffffff', // Text color to be used on secondary color background
+      main: softBeige,
     },
     background: {
-      default: '#f4f6f8', // A light grey background for the overall app
-      paper: '#ffffff', // A white background for cards, dialogs, etc.
+      default: creamWhite,
+      paper: '#FFFFFF',
     },
     text: {
-      primary: '#333333', // Dark text for readability on light backgrounds
-      secondary: '#555555', // Slightly lighter text for secondary information
+      primary: darkBrown,
+      secondary: '#6E665A',
     },
     error: {
-      main: '#d32f2f', // Error color, typically used for validation messages
-    },
-    warning: {
-      main: '#ffa726', // Warning color, useful for alerts
+      main: mutedPeach,
     },
     info: {
-      main: '#0288d1', // Info color, often used for less critical information
-    },
-    success: {
-      main: '#388e3c', // Success color, typically used for success messages
+      main: '#660033',
     },
   },
   typography: {
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    fontSize: 14,
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
-      fontSize: '2.5rem',
-      fontWeight: 500,
+      fontSize: '3rem',
+      fontWeight: 700,
+      color: '#3A2F2A', // Rich brown
     },
     h2: {
-      fontSize: '2rem',
-      fontWeight: 500,
+      fontSize: '2.5rem',
+      fontWeight: 600,
+      color: '#3A2F2A',
     },
     h3: {
-      fontSize: '1.75rem',
+      fontSize: '2rem',
       fontWeight: 500,
+      color: '#6E665A', // Softer taupe
     },
     h4: {
-      fontSize: '1.5rem',
+      fontSize: '1.75rem',
       fontWeight: 500,
+      color: '#6E665A',
     },
     h5: {
-      fontSize: '1.25rem',
-      fontWeight: 500,
+      fontSize: '1.5rem',
+      fontWeight: 400,
+      color: '#6E665A',
     },
-    h6: {
+    body1: {
       fontSize: '1rem',
-      fontWeight: 500,
+      color: '#3A2F2A',
     },
-    button: {
-      textTransform: 'none', // Disable uppercase transformation for buttons
+    body2: {
+      fontSize: '0.875rem',
+      color: '#6E665A',
     },
-  },
-  shape: {
-    borderRadius: 8, // Rounded corners for components
   },
 });
 

@@ -38,10 +38,10 @@ const PaymentPage: React.FC = () => {
   return (
     <>
       {!shippingAddress && <Navigate to="/login" replace={true} />}
-      <Container>
+      <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
         <CheckoutSteps step1 step2 step3 />
-        <Container component="main" maxWidth="md">
-          <Typography component="h1" variant="h5">
+        <Container component="main" maxWidth="sm" sx={{ mt: 4 }}>
+          <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
             Payment Method
           </Typography>
           <form onSubmit={submitHandler}>
@@ -64,15 +64,17 @@ const PaymentPage: React.FC = () => {
                     />
                   </RadioGroup>
                 </FormControl>
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
+                    Continue
+                  </Button>
+                </Grid>
               </Grid>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                sx={{ mt: 2 }}
-              >
-                Continue
-              </Button>
             </Grid>
           </form>
         </Container>

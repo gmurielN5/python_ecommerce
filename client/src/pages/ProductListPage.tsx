@@ -76,21 +76,19 @@ const ProductsListPage: React.FC = () => {
   };
 
   return (
-    <Container>
-      <Grid container alignItems="center" spacing={2} mb={2}>
+    <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
+      <Grid container alignItems="center" mb={2}>
         <Grid item xs={6}>
           <Typography component="h1" variant="h5">
             Products
           </Typography>
         </Grid>
-
         <Grid item xs={6} sx={{ textAlign: 'right' }}>
           <Button
             variant="contained"
             color="primary"
             onClick={createProductHandler}
             startIcon={<AddIcon />}
-            sx={{ mt: 2 }}
           >
             Create Product
           </Button>

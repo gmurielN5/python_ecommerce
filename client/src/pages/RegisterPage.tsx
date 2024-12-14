@@ -1,4 +1,4 @@
-import { useState, SyntheticEvent } from 'react';
+import React, { useState, SyntheticEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import { Link, useLocation, Navigate } from 'react-router-dom';
@@ -49,9 +49,9 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <Container component="main" maxWidth="md">
+    <Container component="main" maxWidth="sm" sx={{ mt: 4 }}>
       {user && <Navigate to="/" replace={true} />}
-      <Typography component="h1" variant="h5">
+      <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
         Register
       </Typography>
 
@@ -118,15 +118,18 @@ const RegisterPage: React.FC = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </Grid>
+          <Grid item xs={12}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ mb: 2 }}
+              fullWidth
+            >
+              Register
+            </Button>
+          </Grid>
         </Grid>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          Register
-        </Button>
       </form>
 
       <Grid container justifyContent="flex-end">

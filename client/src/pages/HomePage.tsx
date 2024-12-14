@@ -13,7 +13,7 @@ import {
 
 import { listProducts } from '../store/products/productActions';
 
-import { Container, Grid } from '@mui/material';
+import { Container, Grid, Typography } from '@mui/material';
 
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
@@ -38,25 +38,27 @@ const HomePage: React.FC = () => {
   }, [dispatch, keyword]);
 
   return (
-    <div>
+    <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
       {!keyword && <ProductCarousel />}
-      <Container>
-        <h1>Latest Products</h1>
-        {loading ? (
-          <Loader />
-        ) : (
-          <>
-            {error ? (
-              <Message severity="error">
-                <>{error}</>
-              </Message>
-            ) : (
-              <>
-                {!products.length ? (
-                  <Message severity="info">
-                    <p>Product not found</p>
-                  </Message>
-                ) : (
+      <Typography component="h1" variant="h1" sx={{ mb: 2 }}>
+        Latest Products
+      </Typography>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          {error ? (
+            <Message severity="error">
+              <>{error}</>
+            </Message>
+          ) : (
+            <>
+              {!products.length ? (
+                <Message severity="info">
+                  <>Product not found</>
+                </Message>
+              ) : (
+                <Container>
                   <Grid
                     container
                     spacing={4}
@@ -76,14 +78,18 @@ const HomePage: React.FC = () => {
                       </Grid>
                     ))}
                   </Grid>
-                )}
-              </>
-            )}
-          </>
-        )}
-        <Paginate page={page} pages={pages} keyword={keyword} />
-      </Container>
-    </div>
+                  <Paginate
+                    page={page}
+                    pages={pages}
+                    keyword={keyword}
+                  />
+                </Container>
+              )}
+            </>
+          )}
+        </>
+      )}
+    </Container>
   );
 };
 

@@ -1,4 +1,9 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useState,
+} from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
@@ -102,15 +107,14 @@ const ProductEditPage: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ mt: 2 }} maxWidth="false">
       <Link to="/admin/productlist" onClick={handleBackClick}>
         Go Back
       </Link>
-      <Container component="main" maxWidth="md">
-        <Typography component="h1" variant="h5">
+      <Container component="main" maxWidth="sm" sx={{ mt: 2 }}>
+        <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
           Edit Product
         </Typography>
-
         {loading ? (
           <Loader />
         ) : error ? (
@@ -130,7 +134,6 @@ const ProductEditPage: React.FC = () => {
                   placeholder="Enter name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  margin="normal"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -144,7 +147,6 @@ const ProductEditPage: React.FC = () => {
                   placeholder="Enter price"
                   value={price}
                   onChange={(e) => setPrice(Number(e.target.value))}
-                  margin="normal"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -184,7 +186,6 @@ const ProductEditPage: React.FC = () => {
                   placeholder="Enter brand"
                   value={brand}
                   onChange={(e) => setBrand(e.target.value)}
-                  margin="normal"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -200,7 +201,6 @@ const ProductEditPage: React.FC = () => {
                   onChange={(e) =>
                     setCountInStock(Number(e.target.value))
                   }
-                  margin="normal"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -213,7 +213,6 @@ const ProductEditPage: React.FC = () => {
                   placeholder="Enter category"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  margin="normal"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -226,20 +225,21 @@ const ProductEditPage: React.FC = () => {
                   placeholder="Enter description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  margin="normal"
                   multiline
                   rows={4}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  Submit
+                </Button>
+              </Grid>
             </Grid>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{ mt: 2 }}
-            >
-              Submit
-            </Button>
           </form>
         )}
       </Container>

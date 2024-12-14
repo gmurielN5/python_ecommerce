@@ -102,18 +102,20 @@ const PlaceOrderPage: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
       {orderLoading ? (
         <Loader />
       ) : (
         <>
           <CheckoutSteps step1 step2 step3 step4 />
-          <Container>
+          <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
             <Grid container spacing={2}>
               <Grid item md={8}>
-                <Card variant="outlined">
+                <Card>
                   <CardContent>
-                    <Typography variant="h5">Shipping</Typography>
+                    <Typography variant="h5" sx={{ mb: 2 }}>
+                      Shipping
+                    </Typography>
                     {!shippingAddress ? null : (
                       <>
                         <Typography>
@@ -136,12 +138,9 @@ const PlaceOrderPage: React.FC = () => {
                     )}
                   </CardContent>
                 </Card>
-                <Card
-                  variant="outlined"
-                  style={{ marginTop: '16px' }}
-                >
+                <Card sx={{ mt: 2 }}>
                   <CardContent>
-                    <Typography variant="h5">
+                    <Typography variant="h5" sx={{ mb: 2 }}>
                       Payment Method
                     </Typography>
                     <Typography>
@@ -150,30 +149,30 @@ const PlaceOrderPage: React.FC = () => {
                     </Typography>
                   </CardContent>
                 </Card>
-                <Card
-                  variant="outlined"
-                  style={{ marginTop: '16px' }}
-                >
+                <Card sx={{ mt: 2 }}>
                   <CardContent>
-                    <Typography variant="h5">Order Items</Typography>
+                    <Typography variant="h5" sx={{ mb: 2 }}>
+                      Order Items
+                    </Typography>
                     {cartItems.length === 0 ? (
                       <Message severity="info">
-                        <p>Your cart is empty</p>
+                        <>Your cart is empty</>
                       </Message>
                     ) : (
-                      <List>
+                      <List sx={{ p: 0 }}>
                         {cartItems.map((item, index) => (
                           <>
-                            <ListItem
-                              alignItems="flex-start"
-                              key={index}
-                            >
+                            <ListItem key={index} sx={{ px: 0 }}>
                               <ListItemAvatar>
                                 <Avatar
                                   variant="rounded"
                                   src={item.image}
                                   alt={item.name}
-                                  sx={{ width: 56, height: 56 }}
+                                  sx={{
+                                    width: 56,
+                                    height: 56,
+                                    mr: 2,
+                                  }}
                                 />
                               </ListItemAvatar>
                               <ListItemText
@@ -200,9 +199,9 @@ const PlaceOrderPage: React.FC = () => {
                 </Card>
               </Grid>
               <Grid item md={4}>
-                <Card variant="outlined">
+                <Card>
                   <CardContent>
-                    <Typography variant="h5">
+                    <Typography variant="h5" sx={{ mb: 2 }}>
                       Order Summary
                     </Typography>
                     <List>
@@ -235,9 +234,9 @@ const PlaceOrderPage: React.FC = () => {
                     <Button
                       variant="contained"
                       color="primary"
-                      fullWidth
                       disabled={cartItems.length === 0}
                       onClick={handleOrder}
+                      fullWidth
                     >
                       Place Order
                     </Button>
