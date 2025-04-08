@@ -71,10 +71,12 @@ const ProfilePage: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
       <Grid container spacing={2}>
         <Grid item md={3}>
-          <Typography variant="h4">User Profile</Typography>
+          <Typography variant="h4" sx={{ mb: 2 }}>
+            User Profile
+          </Typography>
           {message && (
             <Message severity="error">
               <>{message}</>
@@ -87,56 +89,70 @@ const ProfilePage: React.FC = () => {
           )}
           {loading && <Loader />}
           <form onSubmit={submitHandler}>
-            <TextField
-              required
-              fullWidth
-              id="name"
-              label="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              margin="normal"
-            />
-            <TextField
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              margin="normal"
-            />
-            <TextField
-              fullWidth
-              id="password"
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              margin="normal"
-            />
-            <TextField
-              fullWidth
-              id="passwordConfirm"
-              label="Confirm Password"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              margin="normal"
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-            >
-              Update
-            </Button>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="name"
+                  label="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id="password"
+                  label="Password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id="passwordConfirm"
+                  label="Confirm Password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  Update
+                </Button>
+              </Grid>
+            </Grid>
           </form>
         </Grid>
         <Grid item md={9}>
-          {ordersList.length > 0 && (
+          <Typography variant="h4" sx={{ mb: 2 }}>
+            My Orders
+          </Typography>
+          {ordersList.length <= 0 ? (
+            <Message severity="info">
+              <>no orders found</>
+            </Message>
+          ) : (
             <>
-              <Typography variant="h4">My Orders</Typography>
               <Table>
                 <TableHead>
                   <TableRow>

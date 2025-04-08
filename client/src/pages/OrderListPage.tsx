@@ -41,8 +41,8 @@ const OrdersListPage: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <Container>
-      <Typography component="h1" variant="h5">
+    <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
+      <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
         Orders
       </Typography>
       {loading ? (

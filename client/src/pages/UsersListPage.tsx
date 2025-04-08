@@ -47,8 +47,8 @@ const UsersListPage: React.FC = () => {
   };
 
   return (
-    <Container>
-      <Typography component="h1" variant="h5">
+    <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
+      <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
         Users
       </Typography>
       {loading ? (

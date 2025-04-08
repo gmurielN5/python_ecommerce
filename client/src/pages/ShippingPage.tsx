@@ -45,10 +45,10 @@ const ShippingPage: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
       <CheckoutSteps step1 step2 />
-      <Container component="main" maxWidth="md">
-        <Typography component="h1" variant="h5">
+      <Container component="main" maxWidth="sm" sx={{ mt: 4 }}>
+        <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
           Shipping
         </Typography>
         <form onSubmit={submitHandler}>
@@ -63,7 +63,6 @@ const ShippingPage: React.FC = () => {
                 placeholder="Enter address"
                 value={address || ''}
                 onChange={(e) => setAddress(e.target.value)}
-                margin="normal"
               />
             </Grid>
             <Grid item xs={12}>
@@ -76,7 +75,6 @@ const ShippingPage: React.FC = () => {
                 placeholder="Enter city"
                 value={city || ''}
                 onChange={(e) => setCity(e.target.value)}
-                margin="normal"
               />
             </Grid>
             <Grid item xs={12}>
@@ -89,7 +87,6 @@ const ShippingPage: React.FC = () => {
                 placeholder="Enter postal code"
                 value={postalCode || ''}
                 onChange={(e) => setPostalCode(e.target.value)}
-                margin="normal"
               />
             </Grid>
             <Grid item xs={12}>
@@ -102,18 +99,19 @@ const ShippingPage: React.FC = () => {
                 placeholder="Enter country"
                 value={country || ''}
                 onChange={(e) => setCountry(e.target.value)}
-                margin="normal"
               />
             </Grid>
+            <Grid item xs={12}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+              >
+                Continue
+              </Button>
+            </Grid>
           </Grid>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{ mt: 2 }}
-          >
-            Continue
-          </Button>
         </form>
       </Container>
     </Container>

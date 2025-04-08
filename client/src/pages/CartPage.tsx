@@ -73,10 +73,12 @@ const CartPage: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
       <Grid container spacing={2}>
         <Grid item md={8}>
-          <Typography variant="h4">Shopping Cart</Typography>
+          <Typography variant="h4" sx={{ mb: 2 }}>
+            Shopping Cart
+          </Typography>
           {loading && <Loader />}
           {error && (
             <Message severity="error">
@@ -85,9 +87,9 @@ const CartPage: React.FC = () => {
           )}
           {cartItems.length === 0 ? (
             <Message severity="info">
-              <p>
+              <>
                 Your cart is empty <Link to="/">Go Back</Link>
-              </p>
+              </>
             </Message>
           ) : (
             <List>

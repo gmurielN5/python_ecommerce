@@ -65,10 +65,10 @@ const UserEditPage: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ mt: 2 }} maxWidth={false}>
       <Link to="/admin/userlist">Go Back</Link>
-      <Container component="main" maxWidth="md">
-        <Typography component="h1" variant="h5">
+      <Container component="main" maxWidth="sm" sx={{ mt: 2 }}>
+        <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
           Edit User
         </Typography>
         {loading ? (
@@ -90,7 +90,6 @@ const UserEditPage: React.FC = () => {
                   placeholder="Enter name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  margin="normal"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -103,12 +102,12 @@ const UserEditPage: React.FC = () => {
                   placeholder="Enter Email"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  margin="normal"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} container justifyContent="flex-end">
                 <FormControl component="fieldset">
                   <FormControlLabel
+                    sx={{ mr: 0 }}
                     control={
                       <Checkbox
                         checked={isAdmin}
@@ -120,15 +119,17 @@ const UserEditPage: React.FC = () => {
                   />
                 </FormControl>
               </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  Submit
+                </Button>
+              </Grid>
             </Grid>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{ mt: 2 }}
-            >
-              Submit
-            </Button>
           </form>
         )}
       </Container>

@@ -86,7 +86,7 @@ const OrderPage: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -97,16 +97,16 @@ const OrderPage: React.FC = () => {
         <>
           {!order ? (
             <Message severity="error">
-              <p>Order not found</p>
+              <>Order not found</>
             </Message>
           ) : (
             <Container>
-              <Typography variant="h4" gutterBottom>
+              <Typography variant="h4" sx={{ mb: 2 }}>
                 Order: {order._id}
               </Typography>
               <Grid container spacing={2}>
                 <Grid item md={8}>
-                  <Card variant="outlined">
+                  <Card>
                     <CardContent>
                       <Typography variant="h5">Shipping</Typography>
                       <Typography>
@@ -122,21 +122,18 @@ const OrderPage: React.FC = () => {
 
                       {order.isDelivered ? (
                         <Message severity="success">
-                          <p>Delivered on {order.deliveredAt}</p>
+                          <>Delivered on {order.deliveredAt}</>
                         </Message>
                       ) : (
                         <Message severity="warning">
-                          <p>Not Delivered</p>
+                          <>Not Delivered</>
                         </Message>
                       )}
                     </CardContent>
                   </Card>
-                  <Card
-                    variant="outlined"
-                    style={{ marginTop: '16px' }}
-                  >
+                  <Card sx={{ mt: 2 }}>
                     <CardContent>
-                      <Typography variant="h5">
+                      <Typography variant="h5" sx={{ mb: 2 }}>
                         Payment Method
                       </Typography>
                       <Typography>
@@ -145,41 +142,39 @@ const OrderPage: React.FC = () => {
                       </Typography>
                       {order.isPaid ? (
                         <Message severity="success">
-                          <p>Paid on {order.paidAt}</p>
+                          <>Paid on {order.paidAt}</>
                         </Message>
                       ) : (
                         <Message severity="warning">
-                          <p>Not Paid</p>
+                          <>Not Paid</>
                         </Message>
                       )}
                     </CardContent>
                   </Card>
-                  <Card
-                    variant="outlined"
-                    style={{ marginTop: '16px' }}
-                  >
+                  <Card sx={{ mt: 2 }}>
                     <CardContent>
-                      <Typography variant="h5">
+                      <Typography variant="h5" sx={{ mb: 2 }}>
                         Order Items
                       </Typography>
                       {order.orderItems.length === 0 ? (
                         <Message severity="info">
-                          <p>Order is empty</p>
+                          <>Order is empty</>
                         </Message>
                       ) : (
-                        <List>
+                        <List sx={{ p: 0 }}>
                           {order.orderItems.map((item, index) => (
                             <>
-                              <ListItem
-                                alignItems="flex-start"
-                                key={index}
-                              >
+                              <ListItem key={index} sx={{ px: 0 }}>
                                 <ListItemAvatar>
                                   <Avatar
                                     variant="rounded"
                                     src={item.image}
                                     alt={item.name}
-                                    sx={{ width: 56, height: 56 }}
+                                    sx={{
+                                      width: 56,
+                                      height: 56,
+                                      mr: 2,
+                                    }}
                                   />
                                 </ListItemAvatar>
                                 <ListItemText
@@ -207,9 +202,9 @@ const OrderPage: React.FC = () => {
                   </Card>
                 </Grid>
                 <Grid item md={4}>
-                  <Card variant="outlined">
+                  <Card>
                     <CardContent>
-                      <Typography variant="h5">
+                      <Typography variant="h5" sx={{ mb: 2 }}>
                         Order Summary
                       </Typography>
                       <List>
@@ -249,8 +244,8 @@ const OrderPage: React.FC = () => {
                           <Button
                             variant="contained"
                             color="primary"
-                            fullWidth
                             onClick={deliverHandler}
+                            fullWidth
                           >
                             Mark As Delivered
                           </Button>

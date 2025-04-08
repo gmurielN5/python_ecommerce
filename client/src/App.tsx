@@ -21,15 +21,23 @@ import ProductsListPage from './pages/ProductListPage';
 import ProductEditPage from './pages/ProductEditPage';
 import OrdersListPage from './pages/OrderListPage';
 
+import { Container } from '@mui/material';
+
 import { styled } from '@mui/material';
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
 const App: React.FC = () => (
-  <>
+  <Container
+    sx={{
+      display: 'grid',
+      gridTemplateRows: 'auto 1fr auto',
+      minHeight: '100vh',
+    }}
+    maxWidth={false}
+  >
     <Header />
     <Offset />
-
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
@@ -56,7 +64,7 @@ const App: React.FC = () => (
     </Routes>
 
     <Footer />
-  </>
+  </Container>
 );
 
 export default App;

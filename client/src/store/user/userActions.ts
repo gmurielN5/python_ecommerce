@@ -37,7 +37,7 @@ export const login = createAsyncThunk<
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         return rejectWithValue(
-          error.response.data || 'Unknown error occurred'
+          error.response.data.detail || 'Unknown error occurred'
         );
       }
     }
@@ -73,7 +73,7 @@ export const register = createAsyncThunk<
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         return rejectWithValue(
-          error.response.data || 'Unknown error occurred'
+          error.response.data?.detail || 'Unknown error occurred'
         );
       }
     }

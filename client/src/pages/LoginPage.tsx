@@ -41,14 +41,14 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <Container component="main" maxWidth="md">
+    <Container component="main" maxWidth="sm" sx={{ mt: 4 }}>
       {user && <Navigate to={redirect} replace={true} />}
-      <Typography component="h1" variant="h5">
+      <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
         Sign in
       </Typography>
       {error && (
         <Message severity="error">
-          <p>{error}</p>
+          <>{error}</>
         </Message>
       )}
       {loading && <Loader />}
@@ -79,19 +79,22 @@ const LoginPage: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </Grid>
+          <Grid item xs={12}>
+            <Button
+              sx={{ mb: 2 }}
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+            >
+              Login
+            </Button>
+          </Grid>
         </Grid>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          Register
-        </Button>
       </form>
       <Grid container justifyContent="flex-end">
         <Grid item>
-          New Customer?
+          New Customer?{' '}
           <Link
             to={
               redirect
