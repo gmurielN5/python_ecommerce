@@ -107,7 +107,7 @@ const ProductEditPage: React.FC = () => {
   };
 
   return (
-    <Container sx={{ mt: 2 }} maxWidth="false">
+    <Container sx={{ mt: 2 }} maxWidth={false}>
       <Link to="/admin/productlist" onClick={handleBackClick}>
         Go Back
       </Link>

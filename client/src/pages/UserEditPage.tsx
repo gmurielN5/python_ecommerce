@@ -65,7 +65,7 @@ const UserEditPage: React.FC = () => {
   };
 
   return (
-    <Container sx={{ mt: 2 }} maxWidth="false">
+    <Container sx={{ mt: 2 }} maxWidth={false}>
       <Link to="/admin/userlist">Go Back</Link>
       <Container component="main" maxWidth="sm" sx={{ mt: 2 }}>
         <Typography component="h1" variant="h4" sx={{ mb: 2 }}>

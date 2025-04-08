@@ -34,7 +34,7 @@ const App: React.FC = () => (
       gridTemplateRows: 'auto 1fr auto',
       minHeight: '100vh',
     }}
-    maxWidth="false"
+    maxWidth={false}
   >
     <Header />
     <Offset />

@@ -22,8 +22,8 @@ import {
   Container,
   Grid,
   Typography,
-  Card,
-  CardContent,
+  // Card,
+  // CardContent,
   Button,
   FormControl,
   InputLabel,
@@ -92,177 +92,159 @@ const ProductPage: React.FC = () => {
   };
 
   return (
-    <Container sx={{ mt: 2 }} maxWidth="false">
+    <Container sx={{ mt: 2 }} maxWidth={false}>
       <Link to="/">Go Back</Link>
-      <Container component="main" maxWidth="sm" sx={{ mt: 2 }}>
-        {loading ? (
-          <Loader />
-        ) : error ? (
-          <Message severity="error">
-            <>{error}</>
-          </Message>
-        ) : (
-          <>
-            {!product ? null : (
-              <>
-                <Grid container spacing={4}>
-                  <Grid item md={6}>
-                    <Box
-                      component="img"
-                      src={product.image}
-                      alt={product.name}
-                      sx={{ width: '100%', borderRadius: 2 }}
-                    />
-                  </Grid>
-                  <Grid item md={6}>
-                    <List>
+
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message severity="error">
+          <>{error}</>
+        </Message>
+      ) : (
+        <>
+          {!product ? null : (
+            <>
+              <Grid
+                container
+                spacing={2}
+                sx={{ mt: 2 }}
+                maxWidth="false"
+              >
+                <Grid item xs={12} md={6}>
+                  <Box
+                    component="img"
+                    src={product.image}
+                    alt={product.name}
+                    sx={{ width: '100%' }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <List>
+                    <ListItem>
+                      <Typography variant="h3">
+                        {product.name}
+                      </Typography>
+                    </ListItem>
+                    <ListItem>
+                      <BasicRating
+                        value={product.rating}
+                        text={`${product.numReviews} reviews`}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <Typography variant="h4" sx={{ mb: 2 }}>
+                        ${product.price}
+                      </Typography>
+                    </ListItem>
+                    <ListItem>
+                      <Typography>{product.description}</Typography>
+                    </ListItem>
+                    <ListItem>
+                      <Typography>
+                        {product.countInStock > 0
+                          ? 'In Stock'
+                          : 'Out of Stock'}
+                      </Typography>
+                    </ListItem>
+                    {product.countInStock > 0 && (
                       <ListItem>
-                        <Typography variant="h4">
-                          {product.name}
-                        </Typography>
+                        <Grid container alignItems="center">
+                          <Grid item xs={6}>
+                            <Typography>Qty</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <FormControl
+                              fullWidth
+                              variant="outlined"
+                              size="small"
+                            >
+                              <InputLabel>Quantity</InputLabel>
+                              <Select
+                                value={qty}
+                                onChange={handleSelect}
+                                label="Quantity"
+                              >
+                                {[
+                                  ...Array(
+                                    product.countInStock
+                                  ).keys(),
+                                ].map((x) => (
+                                  <MenuItem key={x + 1} value={x + 1}>
+                                    {x + 1}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </Grid>
+                        </Grid>
                       </ListItem>
-                      <ListItem>
-                        <BasicRating
-                          value={product.rating}
-                          text={`${product.numReviews} reviews`}
+                    )}
+                    <ListItem sx={{ my: 2 }}>
+                      <Button
+                        onClick={addToCartHandler}
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        // startIcon={<ShoppingCartIcon />}
+                        disabled={product.countInStock === 0}
+                      >
+                        Add to Cart
+                      </Button>
+                    </ListItem>
+                  </List>
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                spacing={2}
+                sx={{ mt: 2 }}
+                maxWidth="false"
+              >
+                <Grid item xs={12}>
+                  <Typography variant="h5">Reviews</Typography>
+                  {product.reviews.length === 0 && (
+                    <Box sx={{ marginTop: 2 }}>
+                      <Typography
+                        variant="body1"
+                        color="textSecondary"
+                      >
+                        No Reviews
+                      </Typography>
+                    </Box>
+                  )}
+                  <List>
+                    {product.reviews.map((review) => (
+                      <ListItem key={review._id} divider>
+                        <ListItemText
+                          primary={<strong>{review.name}</strong>}
+                          secondary={
+                            <>
+                              <Rating
+                                value={review.rating}
+                                readOnly
+                              />
+                              <Typography>
+                                {review.comment}
+                              </Typography>
+                            </>
+                          }
                         />
                       </ListItem>
-                      <ListItem>
-                        <Typography variant="h6">
-                          Price: ${product.price}
-                        </Typography>
-                      </ListItem>
-                      <ListItem>
-                        <Typography>
-                          Description: {product.description}
-                        </Typography>
-                      </ListItem>
-                    </List>
-                    <Card variant="outlined">
-                      <CardContent>
-                        <List>
-                          <ListItem>
-                            <Grid container>
-                              <Grid item xs={6}>
-                                <Typography>Price:</Typography>
-                              </Grid>
-                              <Grid item xs={6}>
-                                <Typography>
-                                  <strong>£{product.price}</strong>
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </ListItem>
-                          <ListItem>
-                            <Grid container>
-                              <Grid item xs={6}>
-                                <Typography>Status:</Typography>
-                              </Grid>
-                              <Grid item xs={6}>
-                                <Typography>
-                                  {product.countInStock > 0
-                                    ? 'In Stock'
-                                    : 'Out of Stock'}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </ListItem>
-                          {product.countInStock > 0 && (
-                            <ListItem>
-                              <Grid container alignItems="center">
-                                <Grid item xs={6}>
-                                  <Typography>Qty</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                  <FormControl
-                                    fullWidth
-                                    variant="outlined"
-                                    size="small"
-                                  >
-                                    <InputLabel>Quantity</InputLabel>
-                                    <Select
-                                      value={qty}
-                                      onChange={handleSelect}
-                                      label="Quantity"
-                                    >
-                                      {[
-                                        ...Array(
-                                          product.countInStock
-                                        ).keys(),
-                                      ].map((x) => (
-                                        <MenuItem
-                                          key={x + 1}
-                                          value={x + 1}
-                                        >
-                                          {x + 1}
-                                        </MenuItem>
-                                      ))}
-                                    </Select>
-                                  </FormControl>
-                                </Grid>
-                              </Grid>
-                            </ListItem>
-                          )}
-                          <ListItem>
-                            <Button
-                              onClick={addToCartHandler}
-                              fullWidth
-                              variant="contained"
-                              color="primary"
-                              // startIcon={<ShoppingCartIcon />}
-                              disabled={product.countInStock === 0}
-                            >
-                              Add to Cart
-                            </Button>
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid container spacing={4} mt={4}>
-                    <Grid item md={6}>
-                      <Typography variant="h5">Reviews</Typography>
-                      {product.reviews.length === 0 && (
-                        <Box sx={{ marginTop: 2 }}>
-                          <Typography
-                            variant="body1"
-                            color="textSecondary"
-                          >
-                            No Reviews
-                          </Typography>
-                        </Box>
-                      )}
-                      <List>
-                        {product.reviews.map((review) => (
-                          <ListItem key={review._id} divider>
-                            <ListItemText
-                              primary={<strong>{review.name}</strong>}
-                              secondary={
-                                <>
-                                  <Rating
-                                    value={review.rating}
-                                    readOnly
-                                  />
-                                  <Typography>
-                                    {review.comment}
-                                  </Typography>
-                                </>
-                              }
-                            />
-                          </ListItem>
-                        ))}
-                        <ListItem>
-                          <Typography variant="h6">
-                            Write a review
-                          </Typography>
-                        </ListItem>
-                        <ListItem>
-                          {userInfo ? (
-                            <form onSubmit={submitHandler}>
+                    ))}
+                    <ListItem sx={{ p: 0 }}>
+                      <Typography variant="h6" sx={{ my: 2 }}>
+                        Write a review
+                      </Typography>
+                    </ListItem>
+                    <ListItem sx={{ p: 0 }}>
+                      {userInfo ? (
+                        <form onSubmit={submitHandler}>
+                          <Grid container spacing={2}>
+                            <Grid item xs={12}>
                               <FormControl
                                 fullWidth
                                 variant="outlined"
-                                margin="normal"
                               >
                                 <InputLabel id="rating-label">
                                   Rating
@@ -296,7 +278,8 @@ const ProductPage: React.FC = () => {
                                   </MenuItem>
                                 </Select>
                               </FormControl>
-
+                            </Grid>
+                            <Grid item xs={12}>
                               <TextField
                                 id="comment"
                                 label="Review"
@@ -304,13 +287,13 @@ const ProductPage: React.FC = () => {
                                 rows={5}
                                 variant="outlined"
                                 fullWidth
-                                margin="normal"
                                 value={comment}
                                 onChange={(e) =>
                                   setComment(e.target.value)
                                 }
                               />
-
+                            </Grid>
+                            <Grid item xs={12}>
                               <Button
                                 disabled={loading}
                                 type="submit"
@@ -320,25 +303,25 @@ const ProductPage: React.FC = () => {
                               >
                                 Submit
                               </Button>
-                            </form>
-                          ) : (
-                            <Message severity="info">
-                              <p>
-                                Please <Link to="/login">login</Link>{' '}
-                                to write a review
-                              </p>
-                            </Message>
-                          )}
-                        </ListItem>
-                      </List>
-                    </Grid>
-                  </Grid>
+                            </Grid>
+                          </Grid>
+                        </form>
+                      ) : (
+                        <Message severity="info">
+                          <p>
+                            Please <Link to="/login">login</Link> to
+                            write a review
+                          </p>
+                        </Message>
+                      )}
+                    </ListItem>
+                  </List>
                 </Grid>
-              </>
-            )}
-          </>
-        )}
-      </Container>
+              </Grid>
+            </>
+          )}
+        </>
+      )}
     </Container>
   );
 };

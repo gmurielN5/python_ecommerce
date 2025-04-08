@@ -6,9 +6,9 @@ const softBeige = '#EDE7D9'; // Secondary
 const mutedPeach = '#F4A896'; // Accent
 const creamWhite = '#F9F5F1'; // Light background
 const darkBrown = '#3A2F2A'; // Text in light mode
-const deepForest = '#2C3E3B'; // Dark mode background
-const mutedIvory = '#D7CEC6'; // Text in dark mode
-const info = '';
+// const deepForest = '#2C3E3B'; // Dark mode background
+// const mutedIvory = '#D7CEC6'; // Text in dark mode
+// const info = '';
 
 const theme = createTheme({
   palette: {
