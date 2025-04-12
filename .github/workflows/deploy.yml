@@ -8,8 +8,14 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Debug Secrets
+        run: |
+          echo "DOCKER_USERNAME length: ${#DOCKER_USERNAME}"
+          echo "DOCKER_PASSWORD length: ${#DOCKER_PASSWORD}"
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - name: Checkout repository
         uses: actions/checkout@v3
 
