@@ -9,6 +9,8 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: Debug Secrets
         run: |
           echo "DOCKER_USERNAME length: ${#DOCKER_USERNAME}"
@@ -16,9 +18,6 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
