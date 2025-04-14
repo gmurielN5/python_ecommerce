@@ -1,53 +1,22 @@
+version: '3'
 services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres_password
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      retries: 5
-      timeout: 5s
-  nginx:
-    depends_on:
-      - api
-      - client
-    restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
-    ports:
-      - "3000:80"
-  api:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./server
-    volumes:
-      - ./server:/app
-    ports:
-      - "8000:8000"
-    depends_on:
-      postgres:
-        condition: service_healthy  # Ensures API waits for PostgreSQL to be ready
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres_password
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - DEBUG=1
   client:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./client
-    volumes:
-      - /app/node_modules
-      - ./client:/app
-    ports:
-      - "5173:5173"
+    image: 'gmuriel79/elem-client'
+    mem_limit: 128m
+    hostname: client
+  server:
+    image: 'gmuriel79/elem-server'
+    mem_limit: 128m
+    hostname: api
     environment:
-      - NODE_ENV=development
+      - PGUSER=$PGUSER
+      - PGHOST=$PGHOST
+      - PGDATABASE=$PGDATABASE
+      - PGPASSWORD=$PGPASSWORD
+      - PGPORT=$PGPORT
+  nginx:
+    image: 'gmuriel79/elem-nginx'
+    mem_limit: 128m
+    hostname: nginx
+    ports:
+      - '80:80'
